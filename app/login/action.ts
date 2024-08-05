@@ -30,13 +30,16 @@ export async function signup(formData: FormData) {
     password: formData.get("password") as string,
   };
 
-  const { error } = await supabase.auth.signUp(data);
+  const signup = await supabase.auth.signUp(data);
 
-  if (error) {
+  if (signup.error) {
     console.log("juste avant l'erreur");
-    return { error: "Erreur d'inscription : " + error.message };
+    return { error: "Erreur d'inscription : " + signup.error.message };
   }
 
-  revalidatePath("/", "layout");
-  redirect("/");
+  if (signup.data.user?.role === "") {
+    console.log("compte deja existant");
+    return { error: "Compte déjà existant" };
+  }
+  return { data: "Inscription réussie" };
 }

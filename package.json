@@ -15,7 +15,8 @@
     "react": "^18",
     "react-dom": "^18",
     "@supabase/ssr": "latest",
-    "@supabase/supabase-js": "latest"
+    "@supabase/supabase-js": "latest",
+    "date-fns": "latest"
   },
   "devDependencies": {
     "@types/node": "^20",

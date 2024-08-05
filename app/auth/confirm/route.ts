@@ -14,15 +14,13 @@ export async function GET(request: NextRequest) {
   if (token_hash && type) {
     const supabase = createClient();
 
-    const res = await createProfile(supabase);
-    console.log(res);
-
     const { error } = await supabase.auth.verifyOtp({
       type,
       token_hash,
     });
     if (!error) {
-      // redirect user to specified redirect URL or root of app
+      const res = await createProfile(supabase);
+      console.log(res);
       redirect(next);
     }
   }
