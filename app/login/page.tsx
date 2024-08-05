@@ -1,54 +1,60 @@
+"use client";
+import React, { useState } from "react";
 import { login, signup } from "./action";
+import LabeledInput from "@/components/labeledInput";
+import ActionButton from "@/components/actionButton";
+import ErrorHandler from "@/components/errorHandler";
 
-export default function LoginPage() {
+const LoginPage: React.FC = () => {
+  const [error, setError] = useState<string | null>(null);
+
+  const handleLogin = async (formData: FormData) => {
+    const result = await login(formData);
+    if (!result) return;
+    setError(result.error);
+  };
+
+  const handleSignup = async (formData: FormData) => {
+    const result = await signup(formData);
+    if (!result) return;
+    setError(result.error);
+  };
+
   return (
-    <form className="space-y-4">
-      <div>
-        <label
-          htmlFor="email"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Email:
-        </label>
-        <input
+    <div className="flex flex-col items-center justify-center h-full ">
+      <form className="w-96 mx-auto space-y-4 bg-gray-800 rounded-2xl p-5">
+        <LabeledInput
           id="email"
           name="email"
           type="email"
+          label="Email"
           required
-          className="mt-1 block w-full px-3 py-2 bg-gray-800 text-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         />
-      </div>
-      <div>
-        <label
-          htmlFor="password"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Password:
-        </label>
-        <input
+        <LabeledInput
           id="password"
           name="password"
           type="password"
+          label="Password"
           required
-          className="mt-1 block w-full px-3 py-2 bg-gray-800 text-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         />
-      </div>
-      <div>
-        <button
-          formAction={login}
-          className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          Log in
-        </button>
-      </div>
-      <div>
-        <button
-          formAction={signup}
-          className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          Sign up
-        </button>
-      </div>
-    </form>
+        <div className="flex flex-col items-center">
+          <ActionButton
+            onClick={() =>
+              handleLogin(new FormData(document.querySelector("form")!))
+            }
+            label="Log in"
+          />
+          <ActionButton
+            onClick={() =>
+              handleSignup(new FormData(document.querySelector("form")!))
+            }
+            label="Sign up"
+          />
+        </div>
+        <ErrorHandler error={error} />
+      </form>
+    </div>
   );
-}
+};
+
+export default LoginPage;
