@@ -1,27 +1,26 @@
 "use client";
 
-import { Button } from '@/components/button';
 import './globals.css';
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from 'react';
 import listCardComponent from '@/components/listCard';
-import { word_id } from '@/components/entity';
+import { completeWord } from './api/word/route';
 
 export default function Home() {
-    const [listWord, setListWord] = useState<word_id[]>([]);
+    const [listWord, setListWord] = useState<completeWord[]>([]);
   
     useEffect(() => {
       const fetchData = async () => {
         try {
           const response = await fetch(
-            "http://localhost:3000/api/word_of_the_day"
+            "http://localhost:3000/api/word/day"
           );
           if (!response.ok) {
             throw new Error("Network response was not ok");
           }
           const data = await response.json();
           console.log(data);
-          setListWord(data);
+          setListWord(data.data);
+          console.log(listWord);
         } catch (error) {
           console.error("Fetch error:", error);
         }
@@ -30,6 +29,5 @@ export default function Home() {
       fetchData();
     }, []);
 
-    return <>{listCardComponent(listWord, setListWord, null)}</>;
-  
+    return <>{listCardComponent(listWord, setListWord, null)}</>;  
 }

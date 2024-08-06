@@ -1,13 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
 import oneCard from './oneCard';
-import type { word_id } from './entity';
+//import type { word_id } from './entity';
+import { completeWord } from '@/app/api/word/route';
 //import { seeWord } from '../communication/word';
 // import '../globals.css'
 
 let wordIndex = -1;
 let cardIndex = 0;
 let oldWordIndex = -1;
-function listCardComponent(liste: word_id[], setList:(word:word_id[])=>void,onEnd: null | (() => void)) {
+function listCardComponent(liste: completeWord[], setList:(word:completeWord[])=>void,onEnd: null | (() => void)) {
   const containerRefMiddle = useRef<HTMLDivElement | null>(null);
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [yMouseDown, setYMouseDown] = useState(0);
@@ -16,7 +17,7 @@ function listCardComponent(liste: word_id[], setList:(word:word_id[])=>void,onEn
   const login = typeof localStorage !== 'undefined' ? localStorage.getItem('access_token') : '';
 
 
-  const onChangeWord = (word: word_id) => {
+  const onChangeWord = (word: completeWord) => {
     liste[wordIndex] = word;
     console.log(liste);
     setYCoord(yCoord + 1);
@@ -27,7 +28,7 @@ function listCardComponent(liste: word_id[], setList:(word:word_id[])=>void,onEn
     return liste && liste.length > 0;
   };
 
-  const seeingWord = (word:word_id) => {
+  const seeingWord = (word:completeWord) => {
     //seeWord(word.id)
     oldWordIndex = wordIndex;
   }
