@@ -3,16 +3,33 @@
 import { Button } from '@/components/button';
 import './globals.css';
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from 'react';
+import listCardComponent from '@/components/listCard';
+import { word_id } from '@/components/entity';
 
 export default function Home() {
-    const router = useRouter();
-    return (
-      <main className='h-full'>
-        <div className="flex flex-col items-center h-full justify-evenly ">
-          <Button onClick={() => router.push('/mots/mots-du-jour')}>Mots du jour</Button>
-          <Button onClick={() => router.push('/mots/plus-de-mots')}>Plus de mots</Button>
-          <Button onClick={() => router.push('/chercher')}>Chercher</Button>
-        </div>
-      </main>
-  );
+    const [listWord, setListWord] = useState<word_id[]>([]);
+  
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await fetch(
+            "http://localhost:3000/api/word_of_the_day"
+          );
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const data = await response.json();
+          console.log(data);
+          setListWord(data);
+        } catch (error) {
+          console.error("Fetch error:", error);
+        }
+      };
+  
+      fetchData();
+    }, []);
+
+    return <>{listCardComponent(listWord, setListWord, null)}</>;
+  
 }

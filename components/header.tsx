@@ -2,6 +2,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import type { RefObject } from 'react';
 import { useRouter } from 'next/navigation';
+import { Button } from './button';
+import { faCog, faUser, faSearch, faPlus, faHome } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function Header({ children }: { children: React.ReactNode }): JSX.Element {
 
@@ -78,90 +81,62 @@ function Header({ children }: { children: React.ReactNode }): JSX.Element {
 
   return (
     <>
-      <header className="bg-white p-2 flex justify-between items-center z-10">
+      <header className="bg-gray-100 p-2 flex justify-between items-center z-10">
         <button onClick={goBackClick}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="black"
-            className="w-6 h-6 cursor-pointer"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M11 17l-5-5m0 0l5-5m-5 5h12"
-            />
-          </svg>
+          <FontAwesomeIcon icon={faUser} className="text-gray-800 text-2xl ml-2" />
         </button>
         <button
-          className="text-black text-2xl font-bold"
+          className="text-gray-800 text-2xl font-bold"
           onClick={handleTitleClick}
         >
           Polymathon
         </button>
         <button onClick={setOptionVisible} ref={optionRef}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="black"
-            className="w-6 h-6 cursor-pointer"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 3v10m0 0v10m0-10h10m-10 0H2"
-            />
-          </svg>
+          <FontAwesomeIcon icon={faCog} className="text-gray-800 text-2xl mr-1" />
         </button>
       </header>
       {isList && (
   <div
     ref={buttonRef}
-    className="absolute top-14 right-0 z-10 bg-gray-800 text-white rounded-lg shadow-lg"
+    className="absolute top-12 right-0 z-10 bg-gray-200 text-gray-600 rounded-lg shadow-lg flex flex-col"
   >
-    {!token && (
+    {/*!token && (
       <div
         className="p-4 hover:bg-gray-700 cursor-pointer"
         onClick={connectionClick}
       >
         <h4>connexion</h4>
       </div>
-    )}
-    {token && (
+    )*/}
+    {/*token*/ true && (
       <>
-        <div
-          className="p-4 hover:bg-gray-700 cursor-pointer"
-          onClick={logoutClick}
-        >
-          <h4>déconnexion</h4>
-        </div>
-        <div
-          className="p-4 hover:bg-gray-700 cursor-pointer"
-          onClick={profilClick}
-        >
-          <h4>profil</h4>
-        </div>
+        <Button onClick={logoutClick} category="Header">
+          déconnexion
+        </Button>
+        <Button onClick={profilClick} category="Header">
+          profil
+        </Button>
       </>
     )}
-    <div
-      className="p-4 hover:bg-gray-700 cursor-pointer"
-      onClick={contactClick}
-    >
-      <h4>paramètre</h4>
-    </div>
-    <div
-      className="p-4 hover:bg-gray-700 cursor-pointer"
-      onClick={contactClick}
-    >
-      <h4>contact</h4>
-    </div>
+    <Button onClick={contactClick} category="Header">
+      contact
+    </Button>
   </div>
 )}
       {children}
+      <footer className="bg-gray-100 p-2 flex justify-evenly items-center p-3">
+        <button onClick={() => router.push('/')}>
+
+      <FontAwesomeIcon icon={faHome} className="text-gray-800 text-2xl" />
+        </button>
+        <button onClick={() => router.push('/search')}>
+
+      <FontAwesomeIcon icon={faSearch} className="text-gray-800 text-2xl" />
+        </button>
+        <button onClick={() => router.push('/more-worlds')}>
+      <FontAwesomeIcon icon={faPlus} className="text-gray-800 text-2xl" />
+        </button>
+      </footer>
     </>
   );
 }
