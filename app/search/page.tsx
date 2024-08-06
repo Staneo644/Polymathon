@@ -4,14 +4,22 @@ import { ThemeRow } from "@/utils/theme/theme";
 import { useState, useEffect } from "react";
 
 const TousTheme = { id: 0, name: "Tous", parent: null };
+
 function getThemes(themes: ThemeRow[]): ThemeRow[] {
   const res = themes.filter((e) => e.parent === null);
   res.unshift(TousTheme);
   return res;
 }
+
 function getSousThemes(themes: ThemeRow[], parent_id: number): ThemeRow[] {
   const res = themes.filter((e) => e.parent === parent_id);
   return res;
+}
+
+function getNomTheme(selectedTheme: ThemeRow, sousSelectedTheme: ThemeRow) {
+  if (selectedTheme.name === "Tous") return "Tous";
+  if (sousSelectedTheme.name === "Tous") return selectedTheme.name;
+  return sousSelectedTheme.name;
 }
 
 export default function Search() {
@@ -35,9 +43,14 @@ export default function Search() {
       });
   }, []);
 
+  function handleSelectTheme(theme: ThemeRow) {
+    setSelectedTheme(theme);
+    setSousSelectedTheme(TousTheme);
+  }
+
   return (
     <>
-      <div className="h-32 bg-blue-700 p-4">
+      <div className="bg-blue-700 p-4">
         {loading || !themes ? (
           <p>Chargement...</p>
         ) : (
@@ -45,28 +58,24 @@ export default function Search() {
             <ThemeButton
               themes={getThemes(themes)}
               selectedTheme={selectedTheme}
-              setSelectedTheme={setSelectedTheme}
+              setSelectedTheme={handleSelectTheme}
             />
-            {selectedTheme && <p>Thème sélectionné: {selectedTheme.name}</p>}
           </>
         )}
       </div>
-      {selectedTheme.name === "Tous" ? (
-        <p>Tous !</p>
-      ) : (
+      {selectedTheme.name !== "Tous" &&
         !loading &&
-        themes && (
-          <div className="h-32 bg-blue-800 p-4">
-            <p>Theme: {selectedTheme.name}</p>
+        themes &&
+        getSousThemes(themes, selectedTheme.id).length !== 0 && (
+          <div className="bg-blue-800 p-4">
             <ThemeButton
               themes={getSousThemes(themes, selectedTheme.id)}
               selectedTheme={sousSelectedTheme}
               setSelectedTheme={setSousSelectedTheme}
             />
           </div>
-        )
-      )}
-      {<p> </p>}
+        )}
+      {<p>{getNomTheme(selectedTheme, sousSelectedTheme)}</p>}
     </>
   );
 }

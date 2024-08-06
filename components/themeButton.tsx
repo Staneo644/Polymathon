@@ -4,7 +4,7 @@ import { ThemeRow } from "@/utils/theme/theme";
 interface ThemeButtonProps {
   themes: ThemeRow[];
   selectedTheme: ThemeRow;
-  setSelectedTheme: Dispatch<SetStateAction<ThemeRow>>;
+  setSelectedTheme: (ThemeRow: ThemeRow) => void;
 }
 
 const ThemeButton: React.FC<ThemeButtonProps> = ({
