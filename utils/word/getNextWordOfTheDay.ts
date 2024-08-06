@@ -4,7 +4,10 @@ export async function getNextWordOfTheDay(
   supabase: SupabaseClient,
   limit: number
 ) {
-  const { data, error } = await supabase.from("word").select("*");
+  const { data, error } = await supabase
+    .from("word")
+    .select("*")
+    .eq("validated", true);
   //.order("last_day_word", { ascending: true })
   //.limit(limit);
 
