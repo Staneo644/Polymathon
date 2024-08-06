@@ -78,6 +78,7 @@ export async function GET(request: NextRequest) {
       etymology: word.etymology,
       example: word.example,
       theme: getTheme(word.theme, themes.data),
+      last_day_word: word.last_day_word,
     };
   });
 
