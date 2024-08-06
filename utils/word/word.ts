@@ -7,5 +7,6 @@ export interface WordRow {
   etymology: string;
   example: string | null;
   theme: number | null;
-  last_day_word: string | null;
+  validated: boolean;
+  last_day_word: string;
 }

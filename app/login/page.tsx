@@ -32,7 +32,8 @@ const LoginPage: React.FC = () => {
             Un email de confirmation vous a été envoyé
           </h1>
           <h2 className="text-white">
-            Veuillez confirmer votre adresse email pour continuer
+            Veuillez confirmer votre adresse email pour continuer, vous pouvez
+            fermer cette page
           </h2>
         </div>
       ) : (

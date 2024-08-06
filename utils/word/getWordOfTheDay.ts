@@ -5,7 +5,8 @@ export async function getWordOfTheDay(supabase: SupabaseClient) {
   const { data, error } = await supabase
     .from("word")
     .select("*")
-    .eq("last_day_word", today);
+    .eq("last_day_word", today)
+    .eq("validated", true);
 
   if (error) return { error };
   return { data };
