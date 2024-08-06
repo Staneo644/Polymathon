@@ -4,9 +4,7 @@ import { getWordOfTheDay } from "@/utils/word/getWordOfTheDay";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
 
-async function addWordOfTheDay(supabase: SupabaseClient) {
-  const limit = Number(process.env.WORD_OF_THE_DAY_PER_DAY) || 1;
-
+async function addWordOfTheDay(supabase: SupabaseClient, limit: number) {
   const select = await getNextWordOfTheDay(supabase, limit);
 
   if (!select.data || select.error) return { error: select.error };
@@ -29,12 +27,13 @@ async function addWordOfTheDay(supabase: SupabaseClient) {
 
 export async function GET(request: NextRequest) {
   const supabase = createClient();
+  const limit = Number(process.env.WORD_OF_THE_DAY_PER_DAY) || 1;
 
   const { data, error } = await getWordOfTheDay(supabase);
   if (error) return NextResponse.json({ error });
 
-  if (data.length === 0) {
-    const add = await addWordOfTheDay(supabase);
+  if (data.length <= limit) {
+    const add = await addWordOfTheDay(supabase, limit);
     if (add.error) return NextResponse.json({ error: add.error });
     return NextResponse.json({ data: add.data });
   }
