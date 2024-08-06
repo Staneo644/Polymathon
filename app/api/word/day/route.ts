@@ -1,4 +1,6 @@
 import { createClient } from "@/utils/supabase/client";
+import { getThemes } from "@/utils/theme/getThemes";
+import { enrichWord } from "@/utils/word/enrichWord";
 import { getNextWordOfTheDay } from "@/utils/word/getNextWordOfTheDay";
 import { getWordOfTheDay } from "@/utils/word/getWordOfTheDay";
 import { SupabaseClient } from "@supabase/supabase-js";
@@ -29,13 +31,20 @@ export async function GET(request: NextRequest) {
   const supabase = createClient();
   const limit = Number(process.env.WORD_OF_THE_DAY_PER_DAY) || 1;
 
+  const themes = await getThemes(supabase);
+  if (themes.error || !themes.data)
+    return NextResponse.json({ error: themes.error });
+
   const { data, error } = await getWordOfTheDay(supabase);
   if (error) return NextResponse.json({ error });
 
-  if (data.length <= limit) {
+  if (data.length < limit) {
     const add = await addWordOfTheDay(supabase, limit);
     if (add.error) return NextResponse.json({ error: add.error });
-    return NextResponse.json({ data: add.data });
+
+    const final = enrichWord(add.data, themes.data);
+    return NextResponse.json({ data: final });
   }
-  return NextResponse.json({ data });
+  const final = enrichWord(data, themes.data);
+  return NextResponse.json({ data: final });
 }

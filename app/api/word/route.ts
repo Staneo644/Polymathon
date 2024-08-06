@@ -2,6 +2,7 @@ import { getProfile } from "@/utils/profile/getProfile";
 import { createClient } from "@/utils/supabase/server";
 import { getTheme, getThemes } from "@/utils/theme/getThemes";
 import { ThemeRow } from "@/utils/theme/theme";
+import { enrichWord } from "@/utils/word/enrichWord";
 import { WordRow } from "@/utils/word/word";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -62,21 +63,7 @@ export async function GET(request: NextRequest) {
   if (res.error)
     return NextResponse.json({ error: "db error: " + res.error.message });
 
-  const data: WordRow[] = res.data;
-
-  const final: completeWord[] = data.map((word) => {
-    return {
-      id: word.id,
-      name: word.name,
-      definition: word.definition,
-      type: word.type,
-      etymology: word.etymology,
-      example: word.example,
-      theme: getTheme(word.theme, themes.data),
-      last_day_word: word.last_day_word,
-    };
-  });
-
+  const final = enrichWord(res.data, themes.data);
   return NextResponse.json({ data: final });
 }
 

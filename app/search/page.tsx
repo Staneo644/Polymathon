@@ -9,11 +9,17 @@ function getThemes(themes: ThemeRow[]): ThemeRow[] {
   res.unshift(TousTheme);
   return res;
 }
+function getSousThemes(themes: ThemeRow[], parent_id: number): ThemeRow[] {
+  const res = themes.filter((e) => e.parent === parent_id);
+  return res;
+}
 
 export default function Search() {
   const [themes, setThemes] = useState<ThemeRow[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedTheme, setSelectedTheme] = useState<ThemeRow>(TousTheme);
+  const [sousSelectedTheme, setSousSelectedTheme] =
+    useState<ThemeRow>(TousTheme);
 
   useEffect(() => {
     fetch("http://localhost:3000/api/theme")
@@ -29,15 +35,8 @@ export default function Search() {
       });
   }, []);
 
-  const handleThemeSelect = (theme: ThemeRow) => {
-    setSelectedTheme(theme);
-  };
-
   return (
     <>
-      <div className="h-32 bg-blue-600 flex items-center">
-        <h1 className="text-center text-5xl w-full">Explorer</h1>
-      </div>
       <div className="h-32 bg-blue-700 p-4">
         {loading || !themes ? (
           <p>Chargement...</p>
@@ -45,7 +44,6 @@ export default function Search() {
           <>
             <ThemeButton
               themes={getThemes(themes)}
-              onSelect={handleThemeSelect}
               selectedTheme={selectedTheme}
               setSelectedTheme={setSelectedTheme}
             />
@@ -53,6 +51,22 @@ export default function Search() {
           </>
         )}
       </div>
+      {selectedTheme.name === "Tous" ? (
+        <p>Tous !</p>
+      ) : (
+        !loading &&
+        themes && (
+          <div className="h-32 bg-blue-800 p-4">
+            <p>Theme: {selectedTheme.name}</p>
+            <ThemeButton
+              themes={getSousThemes(themes, selectedTheme.id)}
+              selectedTheme={sousSelectedTheme}
+              setSelectedTheme={setSousSelectedTheme}
+            />
+          </div>
+        )
+      )}
+      {<p> </p>}
     </>
   );
 }
