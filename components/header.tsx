@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import type { RefObject } from 'react';
 import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { Button } from './button';
 import { faCog, faUser, faSearch, faPlus, faHome } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,6 +14,12 @@ function Header({ children }: { children: React.ReactNode }): JSX.Element {
   const [token, setToken] = useState(false);
   const buttonRef: RefObject<HTMLDivElement> = useRef(null);
   const optionRef: RefObject<HTMLButtonElement> = useRef(null);
+  const pages = ['/', '/search', '/more-worlds'];
+  const buttonTexture = "text-gray-800 text-2xl "
+  const buttonTextureDown =buttonTexture + "w-1/3 pt-2 pb-3 hover:bg-gray-200 active:bg-gray-300 duration-300"
+  const buttonTextureDownActived = buttonTexture + "w-1/3 pt-1.5 pb-1.5 bg-gray-300 duration-300 text-3xl"
+  const actualPage = usePathname();
+  console.log(actualPage);
 
   const handleTitleClick = (): void => {
     router.push('/');
@@ -36,24 +43,6 @@ function Header({ children }: { children: React.ReactNode }): JSX.Element {
     router.push('/');
     setIsList(false);
   };
-
-  const connectionClick = (): void => {
-    router.push('/options/connexion');
-    setIsList(false);
-  };
-
-  const setOptionVisible = (): void => {
-    setIsList(!isList);
-  };
-
-  const goBackClick = (): void => {
-    router.back();
-  };
-
-  const parametreClick = (): void => {
-    router.push('/options/parametre');
-    setIsList(false);
-  }
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent): void => {
@@ -82,17 +71,17 @@ function Header({ children }: { children: React.ReactNode }): JSX.Element {
   return (
     <>
       <header className="bg-gray-100 p-2 flex justify-between items-center z-10">
-        <button onClick={goBackClick}>
-          <FontAwesomeIcon icon={faUser} className="text-gray-800 text-2xl ml-2" />
+        <button onClick={() => router.push('/profile')}>
+          <FontAwesomeIcon icon={faUser} className={buttonTexture + "ml-2"}/>
         </button>
         <button
-          className="text-gray-800 text-2xl font-bold"
+          className={buttonTexture + " font-bold"}
           onClick={handleTitleClick}
         >
           Polymathon
         </button>
-        <button onClick={setOptionVisible} ref={optionRef}>
-          <FontAwesomeIcon icon={faCog} className="text-gray-800 text-2xl mr-1" />
+        <button onClick={() => router.push('/option')} ref={optionRef}>
+          <FontAwesomeIcon icon={faCog} className={buttonTexture + "mr-1"} />
         </button>
       </header>
       {isList && (
@@ -124,18 +113,11 @@ function Header({ children }: { children: React.ReactNode }): JSX.Element {
   </div>
 )}
       {children}
-      <footer className="bg-gray-100 p-2 flex justify-evenly items-center p-3">
-        <button onClick={() => router.push('/')}>
-
-      <FontAwesomeIcon icon={faHome} className="text-gray-800 text-2xl" />
-        </button>
-        <button onClick={() => router.push('/search')}>
-
-      <FontAwesomeIcon icon={faSearch} className="text-gray-800 text-2xl" />
-        </button>
-        <button onClick={() => router.push('/more-worlds')}>
-      <FontAwesomeIcon icon={faPlus} className="text-gray-800 text-2xl" />
-        </button>
+      <footer className="bg-gray-100 flex justify-evenly items-center">
+      <FontAwesomeIcon icon={faHome} className={actualPage == '/' ? buttonTextureDownActived : buttonTextureDown} onClick={() => router.push('/')}/>
+     <FontAwesomeIcon icon={faSearch} className={actualPage == '/search' ? buttonTextureDownActived : buttonTextureDown} onClick={() => router.push('/search')} />
+      <FontAwesomeIcon icon={faPlus} className={actualPage == '/more-worlds' ? buttonTextureDownActived : buttonTextureDown} onClick={() => router.push('/more-worlds')} />
+      
       </footer>
     </>
   );
