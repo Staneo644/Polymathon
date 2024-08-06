@@ -11,6 +11,13 @@ const Daywords = (): JSX.Element => {
   const [listWord, setListWord] = useState<word_id[]>([]);
 
   useEffect(() => {
+    fetch('/api/word_of_the_day').then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+    }).then((res) => {
+      if (res) setListWord(res);
+    });
     /*getDayWord().then((res) => {
       if (res) setListWord(res);
     });*/
