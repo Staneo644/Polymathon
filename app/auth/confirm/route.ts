@@ -3,6 +3,7 @@ import { type NextRequest } from "next/server";
 
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
+import { createProfile } from "@/utils/profile/createProfile";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -18,7 +19,8 @@ export async function GET(request: NextRequest) {
       token_hash,
     });
     if (!error) {
-      // redirect user to specified redirect URL or root of app
+      const res = await createProfile(supabase);
+      console.log(res);
       redirect(next);
     }
   }

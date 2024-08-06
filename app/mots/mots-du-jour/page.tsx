@@ -1,28 +1,41 @@
-'use client';
-import { useState } from 'react';
-import type { ReactElement } from 'react';
-import listCardComponent from '@/components/listCard';
-import type { word_id } from '@/components/entity';
+"use client";
+import { useState } from "react";
+import type { ReactElement } from "react";
+import listCardComponent from "@/components/listCard";
+import type { word_id } from "@/components/entity";
 //import { getDayWord } from '../../communication/word';
-import '../../globals.css';
-import { useEffect } from 'react';
+import "../../globals.css";
+import { useEffect } from "react";
 
 const Daywords = (): JSX.Element => {
   const [listWord, setListWord] = useState<word_id[]>([]);
 
   useEffect(() => {
-    fetch('/api/word_of_the_day').then((res) => {
-      if (res.ok) {
-        return res.json();
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:3000/api/word_of_the_day"
+        );
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        console.log(data);
+        // setListWord(data);
+      } catch (error) {
+        console.error("Fetch error:", error);
       }
-    }).then((res) => {
-      if (res) setListWord(res);
-    });
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+  
     /*getDayWord().then((res) => {
       if (res) setListWord(res);
     });*/
   }, []);
-
 
   return <>{listCardComponent(listWord, setListWord, null)}</>;
 };
