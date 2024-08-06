@@ -2,6 +2,8 @@
 import ThemeButton from "@/components/themeButton";
 import { ThemeRow } from "@/utils/theme/theme";
 import { useState, useEffect } from "react";
+import { completeWord } from "../api/word/route";
+import listCardComponent from "@/components/listCard";
 
 const TousTheme = { id: 0, name: "Tous", parent: null };
 
@@ -17,7 +19,7 @@ function getSousThemes(themes: ThemeRow[], parent_id: number): ThemeRow[] {
 }
 
 function getNomTheme(selectedTheme: ThemeRow, sousSelectedTheme: ThemeRow) {
-  if (selectedTheme.name === "Tous") return "Tous";
+  if (selectedTheme.name === "Tous") return "";
   if (sousSelectedTheme.name === "Tous") return selectedTheme.name;
   return sousSelectedTheme.name;
 }
@@ -26,6 +28,7 @@ export default function Search() {
   const [themes, setThemes] = useState<ThemeRow[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedTheme, setSelectedTheme] = useState<ThemeRow>(TousTheme);
+  const [listWord, setListWord] = useState<completeWord[]>([]);
   const [sousSelectedTheme, setSousSelectedTheme] =
     useState<ThemeRow>(TousTheme);
 
@@ -42,6 +45,29 @@ export default function Search() {
         setThemes(null);
       });
   }, []);
+
+  useEffect(() => {
+    getNomTheme(selectedTheme, sousSelectedTheme);
+    const fetchData = async () => {
+        try {
+          const response = await fetch(
+            "/api/word?limit=30&theme=" + getNomTheme(selectedTheme, sousSelectedTheme)
+          );
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const data = await response.json();
+          console.log(data);
+          setListWord(data.data);
+          console.log(listWord);
+        } catch (error) {
+          console.error("Fetch error:", error);
+        }
+      };
+  
+      fetchData();
+    
+  }, [selectedTheme, sousSelectedTheme]);
 
   function handleSelectTheme(theme: ThemeRow) {
     setSelectedTheme(theme);
@@ -75,7 +101,8 @@ export default function Search() {
             />
           </div>
         )}
-      {<p>{getNomTheme(selectedTheme, sousSelectedTheme)}</p>}
+
+      {listCardComponent(listWord, setListWord, null)}
     </>
   );
 }

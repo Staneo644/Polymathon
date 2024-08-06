@@ -221,7 +221,7 @@ function listCardComponent(liste: completeWord[], setList:(word:completeWord[])=
       {checked() && (
         <div
           ref={containerRefMiddle}
-          className="w-full h-full"
+          className="w-full"
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}
           onMouseMove={handleMouseMove}
@@ -232,7 +232,7 @@ function listCardComponent(liste: completeWord[], setList:(word:completeWord[])=
           {listCard &&
             listCard.length > 0 &&
             listCard.map((element) => (
-              <div key={element.getIndex()}>{element.getCard()}</div>
+              element.getCard(element.getIndex())
             ))}
         </div>
       )}
