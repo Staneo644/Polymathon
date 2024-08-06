@@ -3,7 +3,7 @@ import { ThemeRow } from "../theme/theme";
 import { WordRow } from "./word";
 import { getTheme } from "../theme/getThemes";
 
-export async function enrichWord(words: WordRow[], themes: ThemeRow[]) {
+export function enrichWord(words: WordRow[], themes: ThemeRow[]) {
   const final: completeWord[] = words.map((word) => {
     return {
       id: word.id,

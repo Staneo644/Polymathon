@@ -45,6 +45,8 @@ export async function GET(request: NextRequest) {
     const final = enrichWord(add.data, themes.data);
     return NextResponse.json({ data: final });
   }
+  console.log(data);
   const final = enrichWord(data, themes.data);
+  console.log(final);
   return NextResponse.json({ data: final });
 }
