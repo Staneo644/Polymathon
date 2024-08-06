@@ -40,6 +40,7 @@ export interface completeWord {
   etymology: string;
   example: string | null;
   theme: string | null;
+  last_day_word: string;
 }
 
 //TODO prendre en compte les vues

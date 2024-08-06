@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import type { ReactElement } from "react";
 import listCardComponent from "@/components/listCard";
 import type { word_id } from "@/components/entity";
 //import { getDayWord } from '../../communication/word';
