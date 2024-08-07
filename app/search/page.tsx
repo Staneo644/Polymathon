@@ -4,19 +4,7 @@ import { ThemeRow } from "@/utils/theme/theme";
 import { useState, useEffect } from "react";
 import { completeWord } from "../api/word/route";
 import listCardComponent from "@/components/listCard";
-
-const TousTheme = { id: 0, name: "Tous", parent: null };
-
-function getThemes(themes: ThemeRow[]): ThemeRow[] {
-  const res = themes.filter((e) => e.parent === null);
-  res.unshift(TousTheme);
-  return res;
-}
-
-function getSousThemes(themes: ThemeRow[], parent_id: number): ThemeRow[] {
-  const res = themes.filter((e) => e.parent === parent_id);
-  return res;
-}
+import { getChildrenThemes, getParentThemes, ThemeAll } from "@/utils/theme/convert-theme";
 
 function getNomTheme(selectedTheme: ThemeRow, sousSelectedTheme: ThemeRow) {
   if (selectedTheme.name === "Tous") return "";
@@ -25,12 +13,12 @@ function getNomTheme(selectedTheme: ThemeRow, sousSelectedTheme: ThemeRow) {
 }
 
 export default function Search() {
-  const [themes, setThemes] = useState<ThemeRow[] | null>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedTheme, setSelectedTheme] = useState<ThemeRow>(TousTheme);
+  const [selectedTheme, setSelectedTheme] = useState<ThemeRow>(ThemeAll);
   const [listWord, setListWord] = useState<completeWord[]>([]);
   const [sousSelectedTheme, setSousSelectedTheme] =
-    useState<ThemeRow>(TousTheme);
+  useState<ThemeRow>(ThemeAll);
+  const [themes, setThemes] = useState<ThemeRow[] | null>(null);
 
   useEffect(() => {
     fetch("http://localhost:3000/api/theme")
@@ -47,11 +35,11 @@ export default function Search() {
   }, []);
 
   useEffect(() => {
-    getNomTheme(selectedTheme, sousSelectedTheme);
     const fetchData = async () => {
         try {
+          const theme = getNomTheme(selectedTheme, sousSelectedTheme);
           const response = await fetch(
-            "/api/word?limit=30&theme=" + getNomTheme(selectedTheme, sousSelectedTheme)
+            theme ? "/api/word?limit=30&theme=" + theme : "api/word?limit=30"
           );
           if (!response.ok) {
             throw new Error("Network response was not ok");
@@ -71,7 +59,7 @@ export default function Search() {
 
   function handleSelectTheme(theme: ThemeRow) {
     setSelectedTheme(theme);
-    setSousSelectedTheme(TousTheme);
+    setSousSelectedTheme(ThemeAll);
   }
 
   return (
@@ -82,7 +70,7 @@ export default function Search() {
         ) : (
           <>
             <ThemeButton
-              themes={getThemes(themes)}
+              themes={getParentThemes(themes)}
               selectedTheme={selectedTheme}
               setSelectedTheme={handleSelectTheme}
             />
@@ -92,10 +80,10 @@ export default function Search() {
       {selectedTheme.name !== "Tous" &&
         !loading &&
         themes &&
-        getSousThemes(themes, selectedTheme.id).length !== 0 && (
+        getChildrenThemes(themes, selectedTheme.id).length !== 0 && (
           <div className="bg-blue-800 p-4">
             <ThemeButton
-              themes={getSousThemes(themes, selectedTheme.id)}
+              themes={getChildrenThemes(themes, selectedTheme.id)}
               selectedTheme={sousSelectedTheme}
               setSelectedTheme={setSousSelectedTheme}
             />
