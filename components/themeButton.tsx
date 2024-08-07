@@ -23,7 +23,7 @@ const ThemeButton: React.FC<ThemeButtonProps> = ({
           key={theme.id}
           className={`px-4 py-2 rounded-full ${
             selectedTheme?.id === theme.id
-              ? "bg-blue-500 text-white"
+              ? "bg-[var(--blue)] text-white"
               : "bg-gray-400"
           }`}
           onClick={() => handleSelect(theme)}

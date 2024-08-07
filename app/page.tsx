@@ -4,6 +4,7 @@ import './globals.css';
 import { useEffect, useState } from 'react';
 import listCardComponent from '@/components/listCard';
 import { completeWord } from './api/word/route';
+import CardContainer from '@/components/cardContainer';
 
 export default function Home() {
     const [listWord, setListWord] = useState<completeWord[]>([]);
@@ -29,5 +30,6 @@ export default function Home() {
       fetchData();
     }, []);
 
-    return <>{listCardComponent(listWord, setListWord, null)}</>;  
+    return <div className="overflow-hidden">{CardContainer(listWord, setListWord, () => {})}</div>;
+    //return <>{listCardComponent(listWord, setListWord, null)}</>;  
 }

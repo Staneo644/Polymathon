@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Header>
-          <main className="overflow-scroll h-[calc(100vh-92px)]">
+          <main className="overflow-hidden h-[calc(100vh-92px)]">
             {children}
           </main>
         </Header>

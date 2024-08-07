@@ -64,7 +64,7 @@ export default function Search() {
 
   return (
     <>
-      <div className="bg-blue-700 p-4">
+      <div className="bg-[var(--yellow)] p-4">
         {loading || !themes ? (
           <p>Chargement...</p>
         ) : (
@@ -81,7 +81,7 @@ export default function Search() {
         !loading &&
         themes &&
         getChildrenThemes(themes, selectedTheme.id).length !== 0 && (
-          <div className="bg-blue-800 p-4">
+          <div className="bg-[var(--dark-yellow)] p-4">
             <ThemeButton
               themes={getChildrenThemes(themes, selectedTheme.id)}
               selectedTheme={sousSelectedTheme}

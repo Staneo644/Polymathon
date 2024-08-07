@@ -13,7 +13,7 @@ function Header({ children }: { children: React.ReactNode }): JSX.Element {
 
   return (
     <>
-      <header className="bg-gray-100 p-2 flex justify-between items-center z-10">  
+      <header className="relative w-full bg-gray-100 p-2 flex justify-between items-center z-10">  
         <FontAwesomeIcon icon={faUser} className={buttonTexture + "ml-2"} onClick={() => router.push('/profile')}/>
         <button
           className={buttonTexture + " font-bold"}
@@ -24,7 +24,7 @@ function Header({ children }: { children: React.ReactNode }): JSX.Element {
         <FontAwesomeIcon icon={faCog} className={buttonTexture + "mr-1"} onClick={() => router.push('/option')}/>
       </header>
       {children}
-      <footer className="bg-gray-100 flex justify-evenly items-center">
+      <footer className="relative w-full b-0 bg-gray-100 flex justify-evenly items-center">
         <FontAwesomeIcon icon={faHome} className={actualPage == '/' ? buttonTextureDownActived : buttonTextureDown} onClick={() => router.push('/')}/>
         <FontAwesomeIcon icon={faSearch} className={actualPage == '/search' ? buttonTextureDownActived : buttonTextureDown} onClick={() => router.push('/search')} />
         <FontAwesomeIcon icon={faPlus} className={actualPage == '/more-worlds' ? buttonTextureDownActived : buttonTextureDown} onClick={() => router.push('/more-worlds')} />

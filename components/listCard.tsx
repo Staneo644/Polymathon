@@ -58,7 +58,7 @@ function listCardComponent(
     });
   };
 
-  const moveToRight = (): void => {
+  const moveUp = (): void => {
     if (checked() && wordIndex < liste.length - 1) {
       if (wordIndex === liste.length - 3) {
         if (onEnd) onEnd();
@@ -84,7 +84,7 @@ function listCardComponent(
     }
   };
 
-  const moveToLeft = (): void => {
+  const moveDown = (): void => {
     if (checked() && wordIndex > 0) {
       if (wordIndex !== liste.length - 1) {
         removeElementAtEnd();
@@ -154,10 +154,10 @@ function listCardComponent(
     const handleKeyPress = (e: any) => {
       if (e.key === "ArrowLeft") {
         rebootListCard();
-        moveToLeft();
+        moveDown();
       } else if (e.key === "ArrowRight") {
         rebootListCard();
-        moveToRight();
+        moveUp();
       }
     };
 
@@ -166,7 +166,7 @@ function listCardComponent(
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [moveToLeft, moveToRight]);
+  }, [moveDown, moveUp]);
 
   const addElementAtEnd = (element: oneCard): void => {
     const list = listCard;
@@ -204,9 +204,9 @@ function listCardComponent(
     rebootListCard();
     const px = event.clientX - yMouseDown;
     if (px > 150) {
-      moveToLeft();
+      moveDown();
     } else if (px < -150) {
-      moveToRight();
+      moveUp();
     }
     setIsMouseDown(false);
   };
