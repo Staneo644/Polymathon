@@ -5,6 +5,11 @@ import { useState, useEffect } from "react";
 import { completeWord } from "../api/word/route";
 import listCardComponent from "@/components/listCard";
 import { getChildrenThemes, getParentThemes, ThemeAll } from "@/utils/theme/convert-theme";
+import CardContainer from "@/components/cardContainer";
+
+export const wordLimit = 9;
+export const wordNewCall = 6;
+
 
 function getNomTheme(selectedTheme: ThemeRow, sousSelectedTheme: ThemeRow) {
   if (selectedTheme.name === "Tous") return "";
@@ -34,24 +39,26 @@ export default function Search() {
       });
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-        try {
-          const theme = getNomTheme(selectedTheme, sousSelectedTheme);
-          const response = await fetch(
-            theme ? "/api/word?limit=30&theme=" + theme : "api/word?limit=30"
-          );
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          const data = await response.json();
-          console.log(data);
-          setListWord(data.data);
-          console.log(listWord);
-        } catch (error) {
-          console.error("Fetch error:", error);
+  const fetchData = async () => {
+      try {
+        const theme = getNomTheme(selectedTheme, sousSelectedTheme);
+        const response = await fetch(
+          theme ? "/api/word?limit=" + wordLimit + "&theme=" + theme : "api/word?limit=" + wordLimit
+        );
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
         }
-      };
+        const data = await response.json();
+        console.log(data);
+        setListWord([... listWord, ... data.data]);
+        console.log(listWord);
+      } catch (error) {
+        console.error("Fetch error:", error);
+      }
+    };
+
+  useEffect(() => {
+      setListWord([]);
   
       fetchData();
     
@@ -90,7 +97,7 @@ export default function Search() {
           </div>
         )}
 
-      {listCardComponent(listWord, setListWord, null)}
+      {CardContainer(listWord, setListWord, fetchData)}
     </>
   );
 }

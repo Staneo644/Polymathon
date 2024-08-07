@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState, useEffect, useRef, ReactNode, ForwardRefExoticComponent } from 'react';
 import React, { forwardRef } from 'react';
 import EtymologyComponent from './etymology';
+import { wordLimit, wordNewCall } from '@/app/search/page';
 
 type Props = {
   //children: ReactNode;
@@ -20,18 +21,7 @@ const OneCard = React.forwardRef<HTMLDivElement, Props>(
     backgroundImage:
     "url(https://s2.qwant.com/thumbr/474x323/7/5/15e7a9bcd784af960fb05e85addd943f5f08a5259bb5803b58a1b3f39473cc/th.jpg?u=https%3A%2F%2Ftse.mm.bing.net%2Fth%3Fid%3DOIP.jytUH6XTOQ7pXAgURy6LYQHaFD%26pid%3DApi&q=0&b=1&p=0&a=0)",
     borderRadius: '20px',
-    /*width: '85vw',
-    justifyContent: 'center',
-    alignItems: 'center',
-    //top: `calc(58px + 5%)`,
     backgroundSize: "cover",
-    left: `calc(${this.refPosition} + ${this.position}px)`,
-    transform: 'translate(-50%)',
-    boxShadow: '0px 0px 10px 0px black',
-    overflowY: 'scroll',
-    overflowX: 'hidden',
-    position: 'absolute',
-    transition: this.transition,*/
   }}
 >
   <div className="mt-2 ml-2 text-xl italic font-serif">
@@ -88,18 +78,24 @@ const CardContainer = (
   const cardsRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [offset, setOffset] = useState(0);
 
-  const cards = [
-    { id: 1, content: "Contenu de la première carte" },
-    { id: 2, content: "Contenu de la deuxième carte" },
-    { id: 3, content: "Contenu de la troisième carte" },
-  ];
-
   useEffect(() => {
     const handleKeyUp = (event:any) => {
-      if (event.key === 'a' || event.key === 'A') {
+      if (event.key === "ArrowDown") {
         setStartIndex((prevIndex) => {
-          const newIndex = (prevIndex + 1) % cards.length;
-          return newIndex;
+          if (prevIndex + 1 < list.length) {
+            if (list.length - prevIndex  == wordLimit - wordNewCall && onEnd)
+              onEnd();
+            return (prevIndex + 1);
+          }
+          return prevIndex;
+        });
+      }
+      if (event.key === 'ArrowUp') {
+        setStartIndex((prevIndex) => {
+          if (prevIndex > 0) {
+            return (prevIndex - 1);
+          }
+          return prevIndex;
         });
       }
     };
@@ -108,7 +104,7 @@ const CardContainer = (
     return () => {
       window.removeEventListener('keyup', handleKeyUp);
     };
-  }, [cards.length]);
+  }, [list.length]);
 
   useEffect(() => {
     if (startIndex > 0) {
