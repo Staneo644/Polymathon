@@ -3,12 +3,15 @@ import ThemeButton from "@/components/themeButton";
 import { ThemeRow } from "@/utils/theme/theme";
 import { useState, useEffect } from "react";
 import { completeWord } from "@/utils/word/enrichWord";
-import { getChildrenThemes, getParentThemes, ThemeAll } from "@/utils/theme/convert-theme";
+import {
+  getChildrenThemes,
+  getParentThemes,
+  ThemeAll,
+} from "@/utils/theme/convert-theme";
 import CardContainer from "@/components/cardContainer";
 
 export const wordLimit = 9;
 export const wordNewCall = 6;
-
 
 function getNomTheme(selectedTheme: ThemeRow, sousSelectedTheme: ThemeRow) {
   if (selectedTheme.name === "Tous") return "";
@@ -22,7 +25,7 @@ export default function Search() {
   const [selectedTheme, setSelectedTheme] = useState<ThemeRow>(ThemeAll);
   const [listWord, setListWord] = useState<completeWord[]>([]);
   const [sousSelectedTheme, setSousSelectedTheme] =
-  useState<ThemeRow>(ThemeAll);
+    useState<ThemeRow>(ThemeAll);
   const [themes, setThemes] = useState<ThemeRow[] | null>(null);
 
   useEffect(() => {
@@ -41,32 +44,37 @@ export default function Search() {
 
   const fetchData = async (empty?: Boolean) => {
     setLoadingWords(true);
-      try {
-        const theme = getNomTheme(selectedTheme, sousSelectedTheme);
-        await fetch(
-          theme ? "/api/word?limit=" + wordLimit + "&theme=" + theme : "api/word?limit=" + wordLimit
-        ).then((res) => res.json())
+    try {
+      const theme = getNomTheme(selectedTheme, sousSelectedTheme);
+      await fetch(
+        theme
+          ? "/api/word?limit=" + wordLimit + "&theme=" + theme
+          : "api/word?limit=" + wordLimit
+      )
+        .then((res) => res.json())
         .then((data) => {
           console.log(data.data);
-          if (empty) {
-            setListWord([])
-            setListWord(data.data);
+          if (data.error) {
+            console.error("Erreur: ", data.error);
+            return;
           }
-          else {
-            setListWord([... listWord, ... data.data]);
+          if (empty) {
+            setListWord([]);
+            setListWord(data.data);
+          } else {
+            setListWord([...listWord, ...data.data]);
           }
           setLoadingWords(false);
           console.log(listWord);
-        })
-      } catch (error) {
-        console.error("Fetch error:", error);
-      }
-    };
+        });
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
+  };
 
   useEffect(() => {
-      setListWord([]);
-      fetchData(true);
-    
+    setListWord([]);
+    fetchData(true);
   }, [selectedTheme, sousSelectedTheme]);
 
   function handleSelectTheme(theme: ThemeRow) {
@@ -102,7 +110,9 @@ export default function Search() {
           </div>
         )}
       {loadingWords && <div>Chargement en cours...</div>}
-      {!loadingWords && listWord.length === 0 && <div>Aucun mot à afficher</div>}
+      {!loadingWords && listWord && listWord.length === 0 && (
+        <div>Aucun mot à afficher</div>
+      )}
       {CardContainer(listWord, setListWord, fetchData)}
     </>
   );
