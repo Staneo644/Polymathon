@@ -2,6 +2,7 @@ import { getLikes } from "@/utils/like/getLikes";
 import { getProfile } from "@/utils/profile/getProfile";
 import { createClient } from "@/utils/supabase/server";
 import { getThemes } from "@/utils/theme/getThemes";
+import { getViews } from "@/utils/view/getViews";
 import { enrichWord } from "@/utils/word/enrichWord";
 import { getNextWordOfTheDay } from "@/utils/word/getNextWordOfTheDay";
 import { getWordOfTheDay } from "@/utils/word/getWordOfTheDay";
@@ -48,14 +49,30 @@ export async function GET(request: NextRequest) {
   if (likes.error || !likes.data)
     return NextResponse.json({ error: likes.error });
 
+  const views = await getViews(supabase, data);
+  if (views.error || !views.data)
+    return NextResponse.json({ error: views.error });
+
   if (data.length < limit) {
     const add = await addWordOfTheDay(supabase, limit);
     if (add.error) return NextResponse.json({ error: add.error });
 
-    const final = enrichWord(add.data, themes.data, likes.data, profile.data);
+    const final = enrichWord(
+      add.data,
+      themes.data,
+      likes.data,
+      profile.data,
+      views.data
+    );
     return NextResponse.json({ data: final });
   }
 
-  const final = enrichWord(data, themes.data, likes.data, profile.data);
+  const final = enrichWord(
+    data,
+    themes.data,
+    likes.data,
+    profile.data,
+    views.data
+  );
   return NextResponse.json({ data: final });
 }

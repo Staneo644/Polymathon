@@ -13,7 +13,7 @@ function getAllowedThemes(themes: ThemeRow[], theme_id: number) {
   }
 }
 
-export async function getWorldByTheme(
+export async function getWorldByThemeLimited(
   supabase: SupabaseClient,
   themes: ThemeRow[],
   theme_id: number | undefined,

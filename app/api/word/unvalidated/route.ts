@@ -51,6 +51,6 @@ export async function GET(request: NextRequest) {
 
   const data: WordRow[] = res.data;
 
-  const final = enrichWord(data, themes.data, [], profile.data); // je met un tableau vide sur les likes car on ne peut pas liker un mot non validé
+  const final = enrichWord(data, themes.data, [], profile.data, []); // je met un tableau vide sur les likes car on ne peut pas liker un mot non validé
   return NextResponse.json({ data: final });
 }

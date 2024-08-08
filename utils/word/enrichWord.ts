@@ -1,9 +1,12 @@
 import { ThemeRow } from "../theme/theme";
 import { WordRow } from "./word";
 import { getTheme } from "../theme/getThemes";
-import { getLikeDislikeNumber, LikeRow } from "../like/getLikes";
+import { getLikeDislikeNumber } from "../like/getLikes";
 import { getUserLikeState } from "../like/getUserLikeState";
 import { ProfileRow } from "../profile/profile";
+import { LikeRow } from "../like/like";
+import { ViewRow } from "../view/view";
+import { getViewNumber } from "../view/getViews";
 
 export interface completeWord {
   id: number;
@@ -17,14 +20,17 @@ export interface completeWord {
   likes: number;
   dislikes: number;
   user_like: boolean | null;
+  views: number;
 }
 
 export function enrichWord(
   words: WordRow[],
   themes: ThemeRow[],
   likes: LikeRow[],
-  profile: ProfileRow
+  profile: ProfileRow,
+  views: ViewRow[]
 ): completeWord[] {
+  console.log(views);
   const final: completeWord[] = words.map((word) => {
     return {
       id: word.id,
@@ -38,6 +44,7 @@ export function enrichWord(
       likes: getLikeDislikeNumber(likes, word.id, true),
       dislikes: getLikeDislikeNumber(likes, word.id, false),
       user_like: getUserLikeState(likes, word.id, profile.id),
+      views: getViewNumber(views, word.id),
     };
   });
 

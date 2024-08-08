@@ -40,11 +40,11 @@ function parseParamsPOST(request: NextRequest): {
 
   const idNumber = Number(id);
   if (Number.isNaN(idNumber) || idNumber <= 0)
-    return { error: "id number should be positive" };
+    return { like: null, error: "id number should be positive" };
 
-  if (like !== null && like !== "true" && like !== "false")
-    return { error: "like should be a boolean or null" };
-  const likeBool = Boolean(like);
+  if (like !== "null" && like !== "true" && like !== "false")
+    return { like: null, error: "like should be a boolean or null" };
+  const likeBool = like === null ? null : Boolean(like);
   return { id: idNumber, like: likeBool };
 }
 
@@ -54,15 +54,15 @@ export async function POST(request: NextRequest) {
   const supabase = createClient();
 
   const { id, like, error } = parseParamsPOST(request);
-  if (error || !id) return NextResponse.json({ error });
+  if (error || !id || !like) return NextResponse.json({ error });
 
   const user_id = await getProfile(supabase);
   if (user_id.error || !user_id.data)
     return NextResponse.json({ error: user_id.error });
 
-  if (await hasToChange(supabase, user_id.data.id, id, like))
+  if (await hasToChange(supabase, id, like))
     return NextResponse.json({ error: "Already in this state" });
-  else if (await destroyLike(supabase, user_id.data.id, id))
+  else if (await destroyLike(supabase, id))
     return NextResponse.json({ error: "Error when deleting previous like" });
 
   const insert = await supabase.from("like").insert({

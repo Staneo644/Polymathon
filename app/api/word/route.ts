@@ -3,8 +3,9 @@ import { getProfile } from "@/utils/profile/getProfile";
 import { createClient } from "@/utils/supabase/server";
 import { getThemes } from "@/utils/theme/getThemes";
 import { ThemeRow } from "@/utils/theme/theme";
+import { getViews } from "@/utils/view/getViews";
 import { enrichWord } from "@/utils/word/enrichWord";
-import { getWorldByTheme } from "@/utils/word/getWorldByTheme";
+import { getWorldByThemeLimited } from "@/utils/word/getWorldByTheme";
 import { NextRequest, NextResponse } from "next/server";
 
 async function parseParamsGET(
@@ -49,7 +50,7 @@ export async function GET(request: NextRequest) {
 
   if (error || !limit) return NextResponse.json({ error });
 
-  const res = await getWorldByTheme(supabase, themes.data, theme, limit);
+  const res = await getWorldByThemeLimited(supabase, themes.data, theme, limit);
   if (res.error || !res.data)
     return NextResponse.json({
       error: "db error getting world by theme: " + res.error,
@@ -59,7 +60,17 @@ export async function GET(request: NextRequest) {
   if (likes.error || !likes.data)
     return NextResponse.json({ error: likes.error });
 
-  const final = enrichWord(res.data, themes.data, likes.data, profile.data);
+  const views = await getViews(supabase, res.data);
+  if (views.error || !views.data)
+    return NextResponse.json({ error: views.error });
+
+  const final = enrichWord(
+    res.data,
+    themes.data,
+    likes.data,
+    profile.data,
+    views.data
+  );
   return NextResponse.json({ data: final });
 }
 

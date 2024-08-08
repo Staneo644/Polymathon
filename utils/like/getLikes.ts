@@ -1,12 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { WordRow } from "../word/word";
-export interface LikeRow {
-  id: number;
-  created_at: string;
-  user: string;
-  word: number;
-  like: boolean;
-}
+import { LikeRow } from "./like";
 
 export function getLikeDislikeNumber(
   likes: LikeRow[],
