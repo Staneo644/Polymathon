@@ -13,7 +13,7 @@ export async function getProfile(supabase: SupabaseClient): Promise<
 > {
   const { data, error } = await supabase.from("profile").select("*").single();
 
-  if (error) return { error: "db error: " + error.message };
+  if (error) return { error: "getProfile db error: " + error.message };
   if (!data) return { error: "No profile found" };
 
   return { data };
