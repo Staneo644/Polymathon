@@ -1,5 +1,7 @@
+import { getProfile } from "@/utils/profile/getProfile";
 import { createClient } from "@/utils/supabase/server";
-import { getTheme, getThemes } from "@/utils/theme/getThemes";
+import { getThemes } from "@/utils/theme/getThemes";
+import { enrichWord } from "@/utils/word/enrichWord";
 import { WordRow } from "@/utils/word/word";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -17,17 +19,6 @@ async function parseParamsGET(
   return { limit: limitNumber };
 }
 
-export interface completeWord {
-  id: number;
-  name: string;
-  definition: string;
-  type: string;
-  etymology: string;
-  example: string | null;
-  theme: string | null;
-  last_day_word: string;
-}
-
 //TODO prendre en compte les vues
 /**
  *
@@ -40,6 +31,10 @@ export async function GET(request: NextRequest) {
   const themes = await getThemes(supabase);
   if (themes.error || !themes.data)
     return NextResponse.json({ error: themes.error });
+
+  const profile = await getProfile(supabase);
+  if (profile.error || !profile.data)
+    return NextResponse.json({ error: profile.error });
 
   const { limit, error } = await parseParamsGET(request);
 
@@ -56,18 +51,6 @@ export async function GET(request: NextRequest) {
 
   const data: WordRow[] = res.data;
 
-  const final: completeWord[] = data.map((word) => {
-    return {
-      id: word.id,
-      name: word.name,
-      definition: word.definition,
-      type: word.type,
-      etymology: word.etymology,
-      example: word.example,
-      theme: getTheme(word.theme, themes.data),
-      last_day_word: word.last_day_word,
-    };
-  });
-
+  const final = enrichWord(data, themes.data, [], profile.data); // je met un tableau vide sur les likes car on ne peut pas liker un mot non validé
   return NextResponse.json({ data: final });
 }

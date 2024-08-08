@@ -1,9 +1,10 @@
+import { getLikes } from "@/utils/like/getLikes";
 import { getProfile } from "@/utils/profile/getProfile";
 import { createClient } from "@/utils/supabase/server";
-import { getTheme, getThemes } from "@/utils/theme/getThemes";
+import { getThemes } from "@/utils/theme/getThemes";
 import { ThemeRow } from "@/utils/theme/theme";
 import { enrichWord } from "@/utils/word/enrichWord";
-import { WordRow } from "@/utils/word/word";
+import { getWorldByTheme } from "@/utils/word/getWorldByTheme";
 import { NextRequest, NextResponse } from "next/server";
 
 async function parseParamsGET(
@@ -27,17 +28,6 @@ async function parseParamsGET(
   return { theme: data[0].id, limit: limitNumber };
 }
 
-export interface completeWord {
-  id: number;
-  name: string;
-  definition: string;
-  type: string;
-  etymology: string;
-  example: string | null;
-  theme: string | null;
-  last_day_word: string;
-}
-
 //TODO prendre en compte les vues
 /**
  *
@@ -51,19 +41,25 @@ export async function GET(request: NextRequest) {
   if (themes.error || !themes.data)
     return NextResponse.json({ error: themes.error });
 
+  const profile = await getProfile(supabase);
+  if (profile.error || !profile.data)
+    return NextResponse.json({ error: profile.error });
+
   const { limit, theme, error } = await parseParamsGET(themes.data, request);
 
   if (error || !limit) return NextResponse.json({ error });
 
-  let req = supabase.from("word").select("*");
-  if (theme) req = req.eq("theme", theme);
-  req = req.limit(limit);
-  const res = await req;
+  const res = await getWorldByTheme(supabase, themes.data, theme, limit);
+  if (res.error || !res.data)
+    return NextResponse.json({
+      error: "db error getting world by theme: " + res.error,
+    });
 
-  if (res.error)
-    return NextResponse.json({ error: "db error: " + res.error.message });
+  const likes = await getLikes(supabase, res.data);
+  if (likes.error || !likes.data)
+    return NextResponse.json({ error: likes.error });
 
-  const final = enrichWord(res.data, themes.data);
+  const final = enrichWord(res.data, themes.data, likes.data, profile.data);
   return NextResponse.json({ data: final });
 }
 
