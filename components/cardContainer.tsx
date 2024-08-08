@@ -25,7 +25,11 @@ const CardContainer = (
     });
   }
   
-  const moveDown = () => {
+  const moveDown = async () => {
+    console.log("fetching");
+    fetch("http://localhost:3000/api/view?id=" + list[startIndex].id, {method: 'POST'}).catch((e: any) => {
+      console.error("erreur: ", e);
+    });
     setStartIndex((prevIndex) => {
       if (prevIndex + 1 < list.length) {
         if (list.length - prevIndex  == wordLimit - wordNewCall && onEnd)
