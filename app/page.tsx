@@ -7,6 +7,7 @@ import CardContainer from '@/components/cardContainer';
 
 export default function Home() {
     const [listWord, setListWord] = useState<completeWord[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
   
     useEffect(() => {
       const fetchData = async () => {
@@ -17,6 +18,7 @@ export default function Home() {
           if (!response.ok) {
             throw new Error("Network response was not ok");
           }
+          setIsLoading(false);
           const data = await response.json();
           console.log(data);
           setListWord(data.data);
@@ -29,6 +31,11 @@ export default function Home() {
       fetchData();
     }, []);
 
-    return <div className="overflow-hidden">{CardContainer(listWord, setListWord, () => {})}</div>;
+    return <div className="overflow-hidden">
+      {isLoading && <div>Chargement en cours...</div>}
+      {!isLoading && listWord.length === 0 && <div>Aucun mot à afficher</div>}
+
+      {CardContainer(listWord, setListWord, () => {})}
+      </div>;
     //return <>{listCardComponent(listWord, setListWord, null)}</>;  
 }
