@@ -2,27 +2,28 @@ import { forwardRef, useEffect, useState } from "react";
 import EtymologyComponent from "./etymology";
 import { faThumbsUp, faThumbsDown, faGreaterThan, faLessThan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { completeWord } from "@/app/api/word/route";
+import { completeWord } from "@/utils/word/enrichWord";
 
 type Props = {
   text: string | null, theme: string | null, isDefinition: boolean, index:number, isVisible: boolean
 };
 
 
-
 const Explanation = (props: Props) =>
   <div className="w-100 absolute transition-transform duration-300 mr-2"
-    style={{
-
-      opacity: `${props.isVisible ? 100 : 0}`,
-      transform: `translateX(${(props.index == 0 ? '-100' : props.index == 2 ? '100' : '0')}vw)`,
-    }}>
+style={{
+  
+  opacity: `${props.isVisible ? 100 : 0}`,
+  transform: `translateX(${(props.index == 0 ? '-100' : props.index == 2 ? '100' : '0')}vw)`,
+}}>
     {props.theme && props.isDefinition && (
       <span className="text-gray-600">{props.theme + " : "}</span>
     )} 
     {EtymologyComponent(props.text ?? "")}
   </div>
 
+const likeWordAPI = (id: number, like: boolean | null) =>
+  fetch("http://localhost:3000/api/like?id=" + id + "&like=" + like, {method: 'POST'})
 
 const OneCard = forwardRef<HTMLDivElement, {word: completeWord}>(
   (props, ref) => {
@@ -31,6 +32,34 @@ const OneCard = forwardRef<HTMLDivElement, {word: completeWord}>(
     const [oldIndex, setOldIndex] = useState(1);
     const [currentIndex, setCurrentIndex] = useState(1);
     const [visibleText, setVisibleText] = useState(false)
+
+    
+    const likeWord = async (like: boolean) => {
+      if (like) {
+        if (props.word.user_like == true) {
+          likeWordAPI(props.word.id, null).then(() => {
+            props.word.user_like = null;
+          });
+        }
+        else {
+          likeWordAPI(props.word.id, true).then(() => {
+            props.word.user_like = true;
+          })
+        }
+      }
+      else {
+        if (props.word.user_like == false) {
+          likeWordAPI(props.word.id, null).then(() => {
+            props.word.user_like = null;
+          });
+        }
+        else {
+          likeWordAPI(props.word.id, false).then(() => {
+            props.word.user_like = false;
+          })
+        }
+      }
+    }
 
     useEffect(() => {
       const definition = props.word.theme ? props.word.theme + ' : ' + props.word.definition : props.word.definition
@@ -129,10 +158,11 @@ const OneCard = forwardRef<HTMLDivElement, {word: completeWord}>(
     <div className="relative left-0 ml-2 mb-3 mt-2">
       <button
         onClick={() => {
-          //this.noteMyWord(note.positif);
+          likeWord(true);
         }}
-      >
+        >
         <FontAwesomeIcon className="text-green-500" icon={faThumbsUp} />
+        {props.word.likes}
       </button>
       {/*'(' + this.word.positive_note + ')'*/}
     </div>
@@ -140,10 +170,11 @@ const OneCard = forwardRef<HTMLDivElement, {word: completeWord}>(
     <div className="relative right-0 mr-2 mb-3 mt-2">
       <button
         onClick={() => {
-          //this.noteMyWord(note.negatif);
+          likeWord(false);
         }}
-      >
+        >
         <FontAwesomeIcon className="text-red-500" icon={faThumbsDown} />
+        {props.word.dislikes}
       </button>
       {/*'(' + this.word.negative_note + ')'*/}
     </div>
