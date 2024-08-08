@@ -20,7 +20,6 @@ export async function getProfile(supabase: SupabaseClient): Promise<
       error?: undefined;
     }
 > {
-  const user_id = await getUserId(supabase);
   const { data, error } = await supabase.from("profile").select("*").single();
 
   if (error) return { error: "getProfile db error: " + error.message };

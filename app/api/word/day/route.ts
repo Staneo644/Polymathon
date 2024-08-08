@@ -1,6 +1,6 @@
 import { getLikes } from "@/utils/like/getLikes";
 import { getProfile } from "@/utils/profile/getProfile";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/server";
 import { getThemes } from "@/utils/theme/getThemes";
 import { enrichWord } from "@/utils/word/enrichWord";
 import { getNextWordOfTheDay } from "@/utils/word/getNextWordOfTheDay";
