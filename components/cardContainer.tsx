@@ -6,16 +6,59 @@ import { useState, useEffect, useRef, ReactNode, ForwardRefExoticComponent } fro
 import React, { forwardRef } from 'react';
 import EtymologyComponent from './etymology';
 import { wordLimit, wordNewCall } from '@/app/search/page';
+import { faLessThan, faGreaterThan } from '@fortawesome/free-solid-svg-icons';
 
 type Props = {
   //children: ReactNode;
   word: completeWord;
 };
 
+export const position = (index:number):string => index == 0 ? "-150" : index == 2 ? '15' : '0'
+
+const Explanation = (text: string | null, theme: string | null, isDefinition: boolean, index:number, isVisible: boolean) =>
+  <div className="w-100 absolute transition-transform duration-300"
+    style={{
+
+      opacity: `${isVisible ? 100 : 0}`,
+      transform: `translateX(${(index == 0 ? '-100' : index == 2 ? '100' : '0')}vw)`,
+    }}>
+    {theme && isDefinition && (
+      <span className="text-gray-600">{theme + " : "}</span>
+    )} 
+    {EtymologyComponent(text ?? "")}
+  </div>
+
 const OneCard = React.forwardRef<HTMLDivElement, Props>(
-  (props, ref) => 
+  (props, ref) => {
+    const listItems = [props.word.example, props.word.definition, props.word.etymology];
+    const [oldIndex, setOldIndex] = useState(1);
+    const [currentIndex, setCurrentIndex] = useState(1);
+
+    const handleLeft= () => {
+      setOldIndex(currentIndex)
+      setCurrentIndex((prevIndex) => {
+        if (prevIndex === 2) {
+          return 0;
+        }
+        return prevIndex + 1;
+      }
+    )
+  };
+  
+  const handleRigth = () => {
+    setOldIndex(currentIndex)
+    setCurrentIndex((prevIndex) => {
+      if (prevIndex === 0) {
+        return 2;
+      }
+      return prevIndex - 1;
+    }
+  );
+    };
+
+    return (
     <div
-  ref={ref}
+    ref={ref}
   className="bg-white shadow-md rounded-lg p-4 mb-[45px] last:mb-0 text-gray-800"
   style={{
     backgroundImage:
@@ -25,7 +68,6 @@ const OneCard = React.forwardRef<HTMLDivElement, Props>(
   }}
 >
   <div className="mt-2 ml-2 text-xl italic font-serif">
-    {EtymologyComponent(props.word.etymology)}
   </div>
   <div className="flex items-center justify-center whitespace-pre">
     <h3 className="font-bold italic font-serif text-2xl">
@@ -37,11 +79,14 @@ const OneCard = React.forwardRef<HTMLDivElement, Props>(
       {")"}
     </h4>
   </div>
-  <div className="mb-2 ml-2 text-xl italic font-serif">
-    {props.word.theme && (
-      <span className="text-gray-600">{props.word.theme + " : "}</span>
-    )}
-    {props.word.definition}
+  <div className="mb-2 ml-2 flex text-xl italic font-serif items-center">
+  <FontAwesomeIcon icon={faLessThan} className="cursor-pointer w-auto" onClick={handleLeft}/>
+  <div className="flex duration-300 transition-transform">
+    {Explanation(listItems[0], props.word.theme, currentIndex == 1, currentIndex == 0 ? 2 : currentIndex - 1, currentIndex == 2 || oldIndex == 2)}
+    {Explanation(listItems[1], props.word.theme, currentIndex == 1, currentIndex, currentIndex == 1 || oldIndex == 1)}
+    {Explanation(listItems[2], props.word.theme, currentIndex == 1, currentIndex == 2 ? 0 : currentIndex + 1, currentIndex == 0 || oldIndex == 0 )}  
+  </div>
+    <FontAwesomeIcon icon={faGreaterThan} className="cursor-pointer" onClick={handleRigth}/>
   </div>
   <div className="mb-2 ml-2 flex justify-between items-center">
     <div className="relative left-0 ml-2 mb-3 mt-2">
@@ -67,6 +112,8 @@ const OneCard = React.forwardRef<HTMLDivElement, Props>(
     </div>
   </div>
 </div>
+    )
+}
 );
 
 const CardContainer = (

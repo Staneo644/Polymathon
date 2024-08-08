@@ -3,7 +3,6 @@ import ThemeButton from "@/components/themeButton";
 import { ThemeRow } from "@/utils/theme/theme";
 import { useState, useEffect } from "react";
 import { completeWord } from "../api/word/route";
-import listCardComponent from "@/components/listCard";
 import { getChildrenThemes, getParentThemes, ThemeAll } from "@/utils/theme/convert-theme";
 import CardContainer from "@/components/cardContainer";
 
@@ -39,7 +38,7 @@ export default function Search() {
       });
   }, []);
 
-  const fetchData = async () => {
+  const fetchData = async (empty?: Boolean) => {
       try {
         const theme = getNomTheme(selectedTheme, sousSelectedTheme);
         const response = await fetch(
@@ -50,7 +49,12 @@ export default function Search() {
         }
         const data = await response.json();
         console.log(data);
-        setListWord([... listWord, ... data.data]);
+        if (empty) {
+          setListWord(data.data);
+        }
+        else {
+          setListWord([... listWord, ... data.data]);
+        }
         console.log(listWord);
       } catch (error) {
         console.error("Fetch error:", error);
@@ -59,8 +63,7 @@ export default function Search() {
 
   useEffect(() => {
       setListWord([]);
-  
-      fetchData();
+      fetchData(true);
     
   }, [selectedTheme, sousSelectedTheme]);
 

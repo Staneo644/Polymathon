@@ -2,7 +2,6 @@
 
 import './globals.css';
 import { useEffect, useState } from 'react';
-import listCardComponent from '@/components/listCard';
 import { completeWord } from './api/word/route';
 import CardContainer from '@/components/cardContainer';
 
