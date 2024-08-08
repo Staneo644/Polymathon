@@ -34,7 +34,6 @@ export async function getWorldByThemeLimited(
     req = req.in("theme", allowedThemes);
   }
 
-  req.order("random()");
   req.limit(limit);
   req.eq("validated", true);
   const res = await req;
