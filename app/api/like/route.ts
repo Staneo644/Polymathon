@@ -1,17 +1,12 @@
 import { getProfile } from "@/utils/profile/getProfile";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/server";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
 
-async function destroyLike(
-  supabase: SupabaseClient,
-  user_id: string,
-  word_id: number
-) {
+async function destroyLike(supabase: SupabaseClient, word_id: number) {
   const { data, error } = await supabase
     .from("like")
     .delete()
-    .eq("user", user_id)
     .eq("word", word_id);
   if (error) return error;
   return data;
@@ -19,14 +14,12 @@ async function destroyLike(
 
 async function hasToChange(
   supabase: SupabaseClient,
-  user_id: string,
   word_id: number,
   like: boolean | null
 ) {
   const { data, error } = await supabase
     .from("like")
     .select("*")
-    .eq("user", user_id)
     .eq("word", word_id)
     .single();
   if (error || !data) return false;

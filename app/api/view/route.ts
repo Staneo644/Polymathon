@@ -1,5 +1,5 @@
 import { getProfile } from "@/utils/profile/getProfile";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
 function parseParamsPOST(request: NextRequest): {
