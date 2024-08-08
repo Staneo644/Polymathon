@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 
 interface LabeledInputProps {
   id: string;
@@ -8,7 +8,7 @@ interface LabeledInputProps {
   required?: boolean;
 }
 
-const LabeledInput: React.FC<LabeledInputProps> = ({
+const LabeledInput: FC<LabeledInputProps> = ({
   id,
   name,
   type,

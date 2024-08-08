@@ -1,13 +1,13 @@
 // app/components/ErrorHandler.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
 interface ErrorHandlerProps {
   error: string | null;
 }
 
-const ErrorHandler: React.FC<ErrorHandlerProps> = ({ error }) => {
+const ErrorHandler: FC<ErrorHandlerProps> = ({ error }) => {
   const [displayError, setDisplayError] = useState<string | null>(null);
 
   useEffect(() => {

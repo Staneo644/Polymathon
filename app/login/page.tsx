@@ -1,11 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import { FC, useState } from "react";
 import { login, signup } from "./action";
 import LabeledInput from "@/components/labeledInput";
 import ActionButton from "@/components/actionButton";
 import ErrorHandler from "@/components/errorHandler";
 
-const LoginPage: React.FC = () => {
+const LoginPage: FC = () => {
   const [mailsent, setMailsent] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 

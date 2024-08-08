@@ -1,10 +1,10 @@
 'use client';
-import { useRouter } from 'next/navigation';
-import { usePathname } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { faCog, faUser, faSearch, faPlus, faHome } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ReactNode } from 'react';
 
-function Header({ children }: { children: React.ReactNode }): JSX.Element {
+function Header({ children }: { children: ReactNode }): JSX.Element {
   const router = useRouter();
   const buttonTexture = "text-gray-800 text-2xl cursor-pointer "
   const buttonTextureDown = buttonTexture + "w-1/3 pt-2 pb-3 hover:bg-gray-200 active:bg-gray-300 duration-300"
@@ -16,7 +16,7 @@ function Header({ children }: { children: React.ReactNode }): JSX.Element {
       <header className="relative w-full bg-gray-100 p-2 flex justify-between items-center z-10">  
         <FontAwesomeIcon icon={faUser} className={buttonTexture + "ml-2"} onClick={() => router.push('/profile')}/>
         <button
-          className={buttonTexture + " font-bold"}
+          className={buttonTexture + " font-bold font-serif italic"}
           onClick={() => router.push('/')}
         >
           Polymathon

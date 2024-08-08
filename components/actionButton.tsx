@@ -1,11 +1,10 @@
-import React from "react";
-
+import { FC } from "react";
 interface ActionButtonProps {
   onClick: () => void;
   label: string;
 }
 
-const ActionButton: React.FC<ActionButtonProps> = ({ onClick, label }) => {
+const ActionButton: FC<ActionButtonProps> = ({ onClick, label }) => {
   return (
     <button
       type="button"
