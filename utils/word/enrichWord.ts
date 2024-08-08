@@ -30,7 +30,6 @@ export function enrichWord(
   profile: ProfileRow,
   views: ViewRow[]
 ): completeWord[] {
-  console.log(views);
   const final: completeWord[] = words.map((word) => {
     return {
       id: word.id,

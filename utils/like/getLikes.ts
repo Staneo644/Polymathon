@@ -27,11 +27,13 @@ export async function getLikes(
     }
 > {
   const words_id = words.filter((word) => word.id).map((word) => word.id);
+  console.log(words_id);
   const { data, error } = await supabase
     .from("like")
     .select("*")
     .in("word", words_id);
 
+  console.log(data, error);
   if (error) {
     return { error: "db error getting likes: " + error.message };
   }

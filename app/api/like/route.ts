@@ -22,6 +22,7 @@ async function hasToChange(
     .select("*")
     .eq("word", word_id)
     .single();
+  console.log(data, error, like);
   if (error || !data) return false;
   if (data.like === like) return false;
   return true;
@@ -44,7 +45,7 @@ function parseParamsPOST(request: NextRequest): {
 
   if (like !== "null" && like !== "true" && like !== "false")
     return { like: null, error: "like should be a boolean or null" };
-  const likeBool = like === null ? null : Boolean(like);
+  const likeBool = like === "null" ? null : like === "true" ? true : false;
   return { id: idNumber, like: likeBool };
 }
 
@@ -60,13 +61,14 @@ export async function POST(request: NextRequest) {
   if (user_id.error || !user_id.data)
     return NextResponse.json({ error: user_id.error });
 
-  if (await hasToChange(supabase, id, like))
+  if (!(await hasToChange(supabase, id, like)))
     return NextResponse.json({ error: "Already in this state" });
-  else if (await destroyLike(supabase, id))
+
+  if (await destroyLike(supabase, id))
     return NextResponse.json({ error: "Error when deleting previous like" });
 
   const insert = await supabase.from("like").insert({
-    user: user_id.data.id,
+    user_id: user_id.data.id,
     word: id,
     like: like,
   });
