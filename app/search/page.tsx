@@ -17,7 +17,8 @@ function getNomTheme(selectedTheme: ThemeRow, sousSelectedTheme: ThemeRow) {
 }
 
 export default function Search() {
-  const [loading, setLoading] = useState(true);
+  const [loadingWords, setLoadingWords] = useState(true);
+  const [loadingThemes, setLoadingThemes] = useState(true);
   const [selectedTheme, setSelectedTheme] = useState<ThemeRow>(ThemeAll);
   const [listWord, setListWord] = useState<completeWord[]>([]);
   const [sousSelectedTheme, setSousSelectedTheme] =
@@ -30,7 +31,7 @@ export default function Search() {
       .then((data) => {
         console.log(data.data);
         setThemes(data.data);
-        setLoading(false);
+        setLoadingThemes(false);
       })
       .catch((e: any) => {
         console.error("erreur: ", e);
@@ -39,23 +40,24 @@ export default function Search() {
   }, []);
 
   const fetchData = async (empty?: Boolean) => {
+    setLoadingWords(true);
       try {
         const theme = getNomTheme(selectedTheme, sousSelectedTheme);
-        const response = await fetch(
+        await fetch(
           theme ? "/api/word?limit=" + wordLimit + "&theme=" + theme : "api/word?limit=" + wordLimit
-        );
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        console.log(data);
-        if (empty) {
-          setListWord(data.data);
-        }
-        else {
-          setListWord([... listWord, ... data.data]);
-        }
-        console.log(listWord);
+        ).then((res) => res.json())
+        .then((data) => {
+          console.log(data.data);
+          if (empty) {
+            setListWord([])
+            setListWord(data.data);
+          }
+          else {
+            setListWord([... listWord, ... data.data]);
+          }
+          setLoadingWords(false);
+          console.log(listWord);
+        })
       } catch (error) {
         console.error("Fetch error:", error);
       }
@@ -75,7 +77,7 @@ export default function Search() {
   return (
     <>
       <div className="bg-[var(--yellow)] p-4">
-        {loading || !themes ? (
+        {loadingThemes || !themes ? (
           <p>Chargement...</p>
         ) : (
           <>
@@ -88,7 +90,7 @@ export default function Search() {
         )}
       </div>
       {selectedTheme.name !== "Tous" &&
-        !loading &&
+        !loadingThemes &&
         themes &&
         getChildrenThemes(themes, selectedTheme.id).length !== 0 && (
           <div className="bg-[var(--dark-yellow)] p-4">
@@ -99,7 +101,8 @@ export default function Search() {
             />
           </div>
         )}
-
+      {loadingWords && <div>Chargement en cours...</div>}
+      {!loadingWords && listWord.length === 0 && <div>Aucun mot à afficher</div>}
       {CardContainer(listWord, setListWord, fetchData)}
     </>
   );

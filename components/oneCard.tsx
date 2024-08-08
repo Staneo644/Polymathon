@@ -11,7 +11,7 @@ type Props = {
 
 
 const Explanation = (props: Props) =>
-  <div className="w-100 absolute transition-transform duration-300 ml-2 mr-2"
+  <div className="w-100 absolute transition-transform duration-300 mr-2"
     style={{
 
       opacity: `${props.isVisible ? 100 : 0}`,
@@ -30,6 +30,7 @@ const OneCard = forwardRef<HTMLDivElement, {word: completeWord}>(
     const [biggerItem, setBiggerItem] = useState("")
     const [oldIndex, setOldIndex] = useState(1);
     const [currentIndex, setCurrentIndex] = useState(1);
+    const [visibleText, setVisibleText] = useState(false)
 
     useEffect(() => {
       const definition = props.word.theme ? props.word.theme + ' : ' + props.word.definition : props.word.definition
@@ -92,8 +93,9 @@ const OneCard = forwardRef<HTMLDivElement, {word: completeWord}>(
       {")"}
     </h4>
   </div>
-  <div className="mb-2 ml-2 text-xl italic font-serif items-center">
-  <div className="duration-300 transition-transform">
+  <button className={"mb-2 ml-2 text-xl italic font-serif text-left" + (visibleText ? " cursor-default" : "")} onClick={() => (setVisibleText(true))}>
+  <div className={`duration-300 transition-transform ${ (visibleText ? " " : " invisible")}`}
+    >
     <Explanation
       text={listItems[0]} 
       theme={props.word.theme} 
@@ -122,7 +124,7 @@ const OneCard = forwardRef<HTMLDivElement, {word: completeWord}>(
     </div>
   <FontAwesomeIcon icon={faLessThan} className="cursor-pointer w-auto" onClick={handleLeft}/>
     <FontAwesomeIcon icon={faGreaterThan} className="cursor-pointer" onClick={handleRigth}/>
-  </div>
+  </button>
   <div className="mb-2 ml-2 flex justify-between items-center">
     <div className="relative left-0 ml-2 mb-3 mt-2">
       <button

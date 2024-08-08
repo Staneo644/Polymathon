@@ -86,6 +86,7 @@ const CardContainer = (
   }, [startIndex]);
 
   return (
+    
     <div className="relative mt-[5px] overflow-hidden" style={{ height: 'calc(100vh - 5px)' }}
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}
