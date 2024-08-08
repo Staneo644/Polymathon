@@ -1,6 +1,6 @@
 "use client";
 import form from "@/components/form";
-import { completeWord } from "../../api/word/route";
+import { completeWord } from "@/utils/word/enrichWord";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 

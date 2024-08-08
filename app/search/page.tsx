@@ -2,7 +2,7 @@
 import ThemeButton from "@/components/themeButton";
 import { ThemeRow } from "@/utils/theme/theme";
 import { useState, useEffect } from "react";
-import { completeWord } from "../api/word/route";
+import { completeWord } from "@/utils/word/enrichWord";
 import { getChildrenThemes, getParentThemes, ThemeAll } from "@/utils/theme/convert-theme";
 import CardContainer from "@/components/cardContainer";
 

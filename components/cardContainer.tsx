@@ -1,5 +1,5 @@
 
-import { completeWord } from '@/app/api/word/route';
+import { completeWord } from "@/utils/word/enrichWord";
 import { useState, useEffect, useRef} from 'react';
 import { wordLimit, wordNewCall } from '@/app/search/page';
 import OneCard from './oneCard';
