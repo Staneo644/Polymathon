@@ -23,8 +23,9 @@ export default function MoreWorld () {
     }, [debouncedValue]);
     
     return (
+      <>
         <div className="flex items-center w-full h-1/3 flex-col">
-        <p className="text-[var(--yellow)] mt-10 font-bold">Entrez le nouveau mot</p>
+        <p className="text-[var(--yellow)] mt-10 font-bold">Entrez le mot à modifier ou ajouter</p>
         <div className="relative">
       <input
         value={inputValue}
@@ -32,8 +33,13 @@ export default function MoreWorld () {
         type="text"
         className="w-full py-2 pr-12 pl-4 border mt-2 text-black border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
         placeholder="Entrez quelque chose..."
-      />
+        />
     </div>
         </div>
+        <div className="flex items-center w-full b-4 flex-col"> 
+          <button className={`text-white bg-${inputValue.length > 0 ? "[var(--yellow)] active:bg-[var(--dark-yellow)]" : "gray-400 cursor-default"} font-bold py-2 px-4 rounded-full mt-4`}>Ajouter</button>
+          
+        </div>
+        </>
     )
 }
