@@ -13,7 +13,7 @@ function Header({ children }: { children: ReactNode }): JSX.Element {
 
   return (
     <>
-      <header className="relative w-full bg-gray-100 p-2 flex justify-between items-center z-10">  
+      <header className="relative w-full bg-gray-100 p-2 flex justify-between items-center">  
         <FontAwesomeIcon icon={faUser} className={buttonTexture + "ml-2"} onClick={() => router.push('/profile')}/>
         <button
           className={buttonTexture + " font-bold font-serif italic"}

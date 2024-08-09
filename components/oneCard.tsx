@@ -1,7 +1,8 @@
 import { forwardRef, useEffect, useState } from "react";
 import EtymologyComponent from "./etymology";
-import { faThumbsUp, faThumbsDown, faGreaterThan, faLessThan } from "@fortawesome/free-solid-svg-icons";
+import { faThumbsUp as faSolidThumbsUp, faThumbsDown as faSolidThumbsDown, faGreaterThan, faLessThan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faThumbsUp as faRegularThumbsUp, faThumbsDown as faRegularThumbsDown} from "@fortawesome/free-regular-svg-icons";
 import { completeWord } from "@/utils/word/enrichWord";
 
 type Props = {
@@ -22,7 +23,7 @@ style={{
     {EtymologyComponent(props.text ?? "")}
   </div>
 
-const likeWordAPI = (id: number, like: boolean | null) =>
+export const likeWordAPI = (id: number, like: boolean | null) =>
   fetch("http://localhost:3000/api/like?id=" + id + "&like=" + like, {method: 'POST'})
 
 const OneCard = forwardRef<HTMLDivElement, {word: completeWord}>(
@@ -32,30 +33,37 @@ const OneCard = forwardRef<HTMLDivElement, {word: completeWord}>(
     const [oldIndex, setOldIndex] = useState(1);
     const [currentIndex, setCurrentIndex] = useState(1);
     const [visibleText, setVisibleText] = useState(false)
+    const [currentLike, setCurrentLike] = useState(props.word.user_like)
+    const [numberLikes, setNumberLikes] = useState(props.word.likes)
+    const [numberDislikes, setNumberDislikes] = useState(props.word.dislikes)
 
     
     const likeWord = async (like: boolean) => {
       if (like) {
-        if (props.word.user_like == true) {
+        if (currentLike == true) {
           likeWordAPI(props.word.id, null).then(() => {
-            props.word.user_like = null;
+            setCurrentLike(null);
+            setNumberLikes(numberLikes - 1);
           });
         }
         else {
           likeWordAPI(props.word.id, true).then(() => {
-            props.word.user_like = true;
+            setCurrentLike(true);
+            setNumberLikes(numberLikes + 1);
           })
         }
       }
       else {
-        if (props.word.user_like == false) {
+        if (currentLike == false) {
           likeWordAPI(props.word.id, null).then(() => {
-            props.word.user_like = null;
+            setCurrentLike(null)
+            setNumberDislikes(numberDislikes - 1);
           });
         }
         else {
           likeWordAPI(props.word.id, false).then(() => {
-            props.word.user_like = false;
+            setCurrentLike(false)
+            setNumberDislikes(numberDislikes + 1);
           })
         }
       }
@@ -157,15 +165,21 @@ const OneCard = forwardRef<HTMLDivElement, {word: completeWord}>(
   <div className="mb-2 ml-2 flex justify-between items-center">
     <div className="relative left-0 ml-2 mb-3 mt-2">
       <button
+      className="p-1"
         onClick={() => {
           likeWord(true);
         }}
         >
-        <FontAwesomeIcon className="text-green-500" icon={faThumbsUp} />
-        {props.word.likes}
+          {currentLike == true ? 
+            <FontAwesomeIcon className="text-green-500 h-5" icon={faSolidThumbsUp}/> :
+            <FontAwesomeIcon className="text-green-500" icon={faRegularThumbsUp}/>
+          }
       </button>
-      {/*'(' + this.word.positive_note + ')'*/}
+        {" " + numberLikes}
     </div>
+    <p className="italic text-gray-500 font-serif">
+      {props.word.views} vues
+    </p>
 
     <div className="relative right-0 mr-2 mb-3 mt-2">
       <button
@@ -173,8 +187,11 @@ const OneCard = forwardRef<HTMLDivElement, {word: completeWord}>(
           likeWord(false);
         }}
         >
-        <FontAwesomeIcon className="text-red-500" icon={faThumbsDown} />
-        {props.word.dislikes}
+          {currentLike == false ? 
+            <FontAwesomeIcon className="text-red-500 h-5" icon={faSolidThumbsDown}/> :
+            <FontAwesomeIcon className="text-red-500" icon={faRegularThumbsDown}/>
+          }
+        {" " + numberDislikes}
       </button>
       {/*'(' + this.word.negative_note + ')'*/}
     </div>
