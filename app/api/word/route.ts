@@ -75,7 +75,7 @@ export async function GET(request: NextRequest) {
 }
 
 /**
- *
+ * Proposer un mot
  * @param prends un json contentant {name: string, definition: string, type: string, etymology: string, example: string, theme: number}
  * @returns data ou error en succes ou reussite
  */
@@ -99,7 +99,6 @@ export async function POST(request: NextRequest) {
       etymology,
       example,
       theme,
-      created_at: new Date().toISOString(),
     },
   ]);
 
@@ -114,7 +113,7 @@ export async function POST(request: NextRequest) {
 }
 
 /**
- *
+ * Valider ou invalider un mot en tant qu'admin
  * @param Prends un json contentant {id: number, validated: boolean}
  * @returns data ou error en succes ou reussite
  */

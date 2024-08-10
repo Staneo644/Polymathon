@@ -1,5 +1,10 @@
+import { getLikes } from "@/utils/like/getLikes";
+import { getProfile } from "@/utils/profile/getProfile";
 import { createClient } from "@/utils/supabase/server";
 import { getTheme, getThemes } from "@/utils/theme/getThemes";
+import { getViews } from "@/utils/view/getViews";
+import { enrichWord } from "@/utils/word/enrichWord";
+import { getWorldByThemeLimited } from "@/utils/word/getWorldByTheme";
 import { WordRow } from "@/utils/word/word";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -45,25 +50,29 @@ export async function GET(request: NextRequest) {
 
   if (error || !limit) return NextResponse.json({ error });
 
-  const res = await supabase.from("word").select("*").limit(limit);
+  const res = await getWorldByThemeLimited(supabase, [], undefined, limit);
 
-  if (res.error)
-    return NextResponse.json({ error: "db error: " + res.error.message });
+  if (res.error || !res.data)
+    return NextResponse.json({ error: "db error: " + res.error });
 
-  const data: WordRow[] = res.data;
+  const likes = await getLikes(supabase, res.data);
+  if (likes.error || !likes.data)
+    return NextResponse.json({ error: likes.error });
 
-  const final: completeWord[] = data.map((word) => {
-    return {
-      id: word.id,
-      name: word.name,
-      definition: word.definition,
-      type: word.type,
-      etymology: word.etymology,
-      example: word.example,
-      theme: getTheme(word.theme, themes.data),
-      last_day_word: word.last_day_word,
-    };
-  });
+  const views = await getViews(supabase, res.data);
+  if (views.error || !views.data)
+    return NextResponse.json({ error: views.error });
 
+  const profile = await getProfile(supabase);
+  if (profile.error || !profile.data)
+    return NextResponse.json({ error: profile.error });
+
+  const final = enrichWord(
+    res.data,
+    themes.data,
+    likes.data,
+    profile.data,
+    views.data
+  );
   return NextResponse.json({ data: final });
 }
