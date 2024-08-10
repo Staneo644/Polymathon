@@ -36,6 +36,9 @@ export async function GET(request: NextRequest) {
   if (profile.error || !profile.data)
     return NextResponse.json({ error: profile.error });
 
+  if (profile.data.admin === false)
+    return NextResponse.json({ error: "You are not an admin" });
+
   const { limit, error } = await parseParamsGET(request);
 
   if (error || !limit) return NextResponse.json({ error });
