@@ -6,8 +6,10 @@ import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { faEuro } from "@fortawesome/free-solid-svg-icons";
 import { faComment } from "@fortawesome/free-solid-svg-icons";
 import { YellowButton } from "@/components/button";
+import { useState, useEffect } from "react";
 
 export default function Option() {
+
     return (
         <div className="flex flex-col justify-evenly h-full">
             <div className="flex justify-between mx-10 items-center">

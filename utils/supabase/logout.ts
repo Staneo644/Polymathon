@@ -3,7 +3,7 @@ import { createClientClient } from "./client";
 /**
  * Cette fonction **front** deconnecte le client et log un message d'erreur en cas d'echec
  */
-async function logout() {
+export async function logout() {
   const supabase = createClientClient();
 
   const { error } = await supabase.auth.signOut();

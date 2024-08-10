@@ -1,6 +1,7 @@
 "use client";
+import { logout } from "@/utils/supabase/logout";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 
@@ -9,6 +10,25 @@ export default function Profile() {
     const [showLogout, setShowLogout] = useState(false);
     const [statusHideDefinition, setStatusHideDefinition] = useState(localStorage.getItem('hideDefinition') == 'true');
     const [statusHideLikesDislikes, setStatusHideLikesDislikes] = useState(localStorage.getItem('hideLikesDislikes') == 'true');
+    const [seenWords, setSeenWords] = useState();
+      const [likedWords, setLikedWords] = useState();
+      const [dislikedWords, setDislikedWords] = useState();
+
+      useEffect(() => {
+        fetch("http://localhost:3000/api/stats", {method: 'GET'}).then((response) => {
+          if (response.ok) {
+            response.json().then((data) => {
+              setSeenWords(data.views);
+                  setLikedWords(data.likes);
+                  setDislikedWords(data.dislikes);
+            });
+          }
+        }
+        ).catch((e) => {
+          console.error("erreur: ", e);
+        });
+      }, []);
+
 
     const hideDefinition = (e: any) => {
         localStorage.setItem('hideDefinition', e.target.checked);
@@ -33,7 +53,7 @@ export default function Profile() {
             <p>Êtes-vous sûr de vouloir vous déconnecter ?</p>
             <br />
             <div className="flex justify-between">
-            <button className="bg-red-600 rounded-full p-2 w-1/3 text-white">Oui</button>
+            <button className="bg-red-600 rounded-full p-2 w-1/3 text-white" onClick={() => {logout().then(router.refresh)}}>Oui</button>
             <button className="bg-[var(--blue)] rounded-full p-2 w-1/3 text-white" onClick={() => setShowLogout(false)}>Non</button>
             </div>
             </div>
@@ -59,17 +79,17 @@ export default function Profile() {
         </div>
         <div className="w-3/4 mx-auto mt-4">
         <div className="flex justify-between">
-        Mots vues : {0}
+        Mots vues : {seenWords}
         <SeeButton newURL="/profile/mots-vus" />
         </div>
         <div className="flex justify-between mt-2">
 
-        Mots likés : {0}
+        Mots likés : {likedWords}
         <SeeButton newURL="/profile/mots-likes" />
         </div>
         <div className="flex justify-between mt-2">
 
-        Mots dislikés : {0}
+        Mots dislikés : {dislikedWords}
         <SeeButton newURL="/profile/mots-dislikes" />
         </div>
         </div>

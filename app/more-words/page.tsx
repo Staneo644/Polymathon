@@ -37,7 +37,7 @@ export default function MoreWorld () {
       ).catch((e) => {
         console.error("erreur: ", e);
       });
-    }
+    }, []);
     
     return (
       <>
@@ -57,6 +57,9 @@ export default function MoreWorld () {
           <YellowButton onClick={() => {router.push("/more-words/add-word?word=" + inputValue)}} inactive={inputValue.length == 0} className={"font-bold py-2 px-4 rounded-full mt-4"}>
             Ajouter
             </YellowButton>
+            {isAdmin && <YellowButton onClick={() => {router.push("/more-words/validate-words" + inputValue)}} inactive={inputValue.length == 0} className={"font-bold py-2 px-4 rounded-full mt-4"}>
+            Valide les mots mon pitit BG d'admin
+            </YellowButton>}
 
         </div>
         </>
