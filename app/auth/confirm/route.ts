@@ -20,7 +20,6 @@ export async function GET(request: NextRequest) {
     });
     if (!error) {
       const res = await createProfile(supabase);
-      console.log(res);
       redirect(next);
     }
   }

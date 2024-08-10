@@ -22,8 +22,6 @@ const LoginPage: FC = () => {
     if (result.data) setMailsent(true);
   };
 
-  console.log(mailsent);
-
   return (
     <div className="flex flex-col items-center justify-center h-full ">
       {mailsent ? (

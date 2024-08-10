@@ -32,7 +32,6 @@ export default function Search() {
     fetch("http://localhost:3000/api/theme")
       .then((res) => res.json())
       .then((data) => {
-        console.log(data.data);
         setThemes(data.data);
         setLoadingThemes(false);
       })
@@ -53,7 +52,6 @@ export default function Search() {
       )
         .then((res) => res.json())
         .then((data) => {
-          console.log(data.data);
           if (data.error) {
             console.error("Erreur: ", data.error);
             return;
@@ -65,7 +63,6 @@ export default function Search() {
             setListWord([...listWord, ...data.data]);
           }
           setLoadingWords(false);
-          console.log(listWord);
         });
     } catch (error) {
       console.error("Fetch error:", error);

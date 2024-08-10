@@ -33,12 +33,10 @@ export async function signup(formData: FormData) {
   const signup = await supabase.auth.signUp(data);
 
   if (signup.error) {
-    console.log("juste avant l'erreur");
     return { error: "Erreur d'inscription : " + signup.error.message };
   }
 
   if (signup.data.user?.role === "") {
-    console.log("compte deja existant");
     return { error: "Compte déjà existant" };
   }
   return { data: "Inscription réussie" };

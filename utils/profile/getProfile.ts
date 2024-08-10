@@ -5,8 +5,6 @@ export async function getUserId(
   supabase: SupabaseClient
 ): Promise<string | undefined> {
   const user = await supabase.auth.getUser();
-  console.log("getUser(): ", user);
-  console.log(user.data.user);
   return user.data.user?.id;
 }
 
