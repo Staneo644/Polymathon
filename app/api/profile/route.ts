@@ -7,5 +7,5 @@ export async function GET(request: NextRequest) {
 
   const res = await getProfile(supabase);
   if (res.error || !res.data) return NextResponse.json({ error: res.error });
-  return NextResponse.json({ admin: res.data.admin });
+  return NextResponse.json({ admin: res.data });
 }
