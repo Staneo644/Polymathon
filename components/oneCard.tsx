@@ -22,22 +22,22 @@ style={{
     {EtymologyComponent(props.text ?? "")}
   </div>
 /*<FontAwesomeIcon icon={faSlash} className="cursor-pointer -rotate-90 absolute" onClick={handleLeft}/>
-    <FontAwesomeIcon icon={faSlash} className="cursor-pointer -rotate-90 -scale-x-100 absolute -translate-x-100" onClick={handleRigth}
+    <FontAwesomeIcon icon={faSlash} className="cursor-pointer -rotate-90 -scale-x-100 absolute -translate-x-100" onClick={handleRight}
       style={
         {transform: "rotate(-90deg) scaleX(-1) translateX(-99%)"} 
       }
     />*/
 
-const Arrow = (props: {directionLeft: boolean, onClick: () => void}) => 
+const Arrow = (props: {directionRight: boolean, onClick: () => void}) => 
   
-  <button onClick={props.onClick} className="absolute -rotate-90">
+  <button onClick={props.onClick} className="absolute">
     <FontAwesomeIcon icon={faSlash} 
     style={
-      {transform: `rotate(-90deg) ${props.directionLeft ? "" : "scaleX(-1) translateX(-99%)"} `}
+      {transform: `rotate(-90deg) ${props.directionRight ? "" : "scaleX(-1) translateX(88%) translateY(120%)"} `}
     }/>
-    <FontAwesomeIcon icon={faSlash} className="absolute -rotate-90"
+    <FontAwesomeIcon icon={faSlash} className="absolute"
       style={
-        {transform: `rotate(-90deg) ${props.directionLeft ? "scaleX(-1) translateX(-99%)" : ""} `} 
+        {transform: `rotate(-90deg) ${props.directionRight ? "scaleX(-1) translateX(-88%) translateY(-120%)" : ""} `} 
       }
     />
   </button>
@@ -124,7 +124,7 @@ const OneCard = forwardRef<HTMLDivElement, {word: completeWord, hideLikesDislike
     )
   };
   
-  const handleRigth = () => {
+  const handleRight = () => {
     setOldIndex(currentIndex)
     setCurrentIndex((prevIndex) => {
       if (prevIndex === 0) {
@@ -186,8 +186,8 @@ const OneCard = forwardRef<HTMLDivElement, {word: completeWord, hideLikesDislike
 
   {biggerItem}
     </div>
-    <Arrow directionLeft={true} onClick={handleLeft}/>
-    <Arrow directionLeft={false} onClick={handleRigth}/>
+    <Arrow directionRight={false} onClick={handleLeft}/>
+    <Arrow directionRight={true} onClick={handleRight}/>
   </button>
   {
     props.hideLikesDislikes ? null :

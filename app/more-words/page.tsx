@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 export default function MoreWorld () {
     const [inputValue, setInputValue] = useState('');
     const [debouncedValue, setDebouncedValue] = useState(inputValue);
+    const [isAdmin, setIsAdmin] = useState(false);
     const router = useRouter();
   
     useEffect(() => {
@@ -24,6 +25,19 @@ export default function MoreWorld () {
         //TO COMPLETE
       }
     }, [debouncedValue]);
+
+    useEffect(() => {
+      fetch("http://localhost:3000/api/admin", {method: 'GET'}).then((response) => {
+        if (response.ok) {
+          response.json().then((data) => {
+            setIsAdmin(data.admin);
+          });
+        }
+      }
+      ).catch((e) => {
+        console.error("erreur: ", e);
+      });
+    }
     
     return (
       <>
