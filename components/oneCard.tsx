@@ -12,8 +12,7 @@ type Props = {
 
 const Explanation = (props: Props) =>
   <div className="w-100 absolute transition-transform duration-300 mr-2"
-style={{
-  
+style={{  
   opacity: `${props.isVisible ? 100 : 0}`,
   transform: `translateX(${(props.index == 0 ? '-100' : props.index == 2 ? '100' : '0')}vw)`,
 }}>
@@ -22,6 +21,28 @@ style={{
     )} 
     {EtymologyComponent(props.text ?? "")}
   </div>
+/*<FontAwesomeIcon icon={faSlash} className="cursor-pointer -rotate-90 absolute" onClick={handleLeft}/>
+    <FontAwesomeIcon icon={faSlash} className="cursor-pointer -rotate-90 -scale-x-100 absolute -translate-x-100" onClick={handleRigth}
+      style={
+        {transform: "rotate(-90deg) scaleX(-1) translateX(-99%)"} 
+      }
+    />*/
+
+const Arrow = (props: {directionLeft: boolean, onClick: () => void}) => 
+  
+  <button onClick={props.onClick} className="absolute -rotate-90">
+    <FontAwesomeIcon icon={faSlash} 
+    style={
+      {transform: `rotate(-90deg) ${props.directionLeft ? "" : "scaleX(-1) translateX(-99%)"} `}
+    }/>
+    <FontAwesomeIcon icon={faSlash} className="absolute -rotate-90"
+      style={
+        {transform: `rotate(-90deg) ${props.directionLeft ? "scaleX(-1) translateX(-99%)" : ""} `} 
+      }
+    />
+  </button>
+  
+
 
 export const likeWordAPI = (id: number, like: boolean | null) =>
   fetch("http://localhost:3000/api/like?id=" + id + "&like=" + like, {method: 'POST'})
@@ -48,6 +69,9 @@ const OneCard = forwardRef<HTMLDivElement, {word: completeWord, hideLikesDislike
         }
         else {
           likeWordAPI(props.word.id, true).then(() => {
+            if (currentLike == false) {
+              setNumberDislikes(numberDislikes - 1);
+            }
             setCurrentLike(true);
             setNumberLikes(numberLikes + 1);
           })
@@ -62,6 +86,9 @@ const OneCard = forwardRef<HTMLDivElement, {word: completeWord, hideLikesDislike
         }
         else {
           likeWordAPI(props.word.id, false).then(() => {
+            if (currentLike == true) {
+              setNumberLikes(numberLikes - 1);
+            }
             setCurrentLike(false)
             setNumberDislikes(numberDislikes + 1);
           })
@@ -159,8 +186,8 @@ const OneCard = forwardRef<HTMLDivElement, {word: completeWord, hideLikesDislike
 
   {biggerItem}
     </div>
-  <FontAwesomeIcon icon={faSlash} className="cursor-pointer -rotate-90" onClick={handleLeft}/>
-    <FontAwesomeIcon icon={faSlash} className="cursor-pointer -rotate-90 -scale-100 skew-y-12" onClick={handleRigth}/>
+    <Arrow directionLeft={true} onClick={handleLeft}/>
+    <Arrow directionLeft={false} onClick={handleRigth}/>
   </button>
   {
     props.hideLikesDislikes ? null :
