@@ -1,11 +1,13 @@
 "use client";
 
 import { YellowButton } from "@/components/button";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 export default function MoreWorld () {
     const [inputValue, setInputValue] = useState('');
     const [debouncedValue, setDebouncedValue] = useState(inputValue);
+    const router = useRouter();
   
     useEffect(() => {
       const handler = setTimeout(() => {
@@ -38,7 +40,7 @@ export default function MoreWorld () {
     </div>
         </div>
         <div className="flex items-center w-full b-4 flex-col"> 
-          <YellowButton onClick={() => {}} inactive={inputValue.length == 0} className={"font-bold py-2 px-4 rounded-full mt-4"}>
+          <YellowButton onClick={() => {router.push("/more-words/add-word?word=" + inputValue)}} inactive={inputValue.length == 0} className={"font-bold py-2 px-4 rounded-full mt-4"}>
             Ajouter
             </YellowButton>
 

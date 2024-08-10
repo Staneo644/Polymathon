@@ -4,6 +4,11 @@ import { useState } from "react";
 import { likeWordAPI } from "./oneCard";
 import { faThumbsUp as faRegularThumbsUp, faThumbsDown as faRegularThumbsDown} from "@fortawesome/free-regular-svg-icons";
 import { faThumbsUp as faSolidThumbsUp, faThumbsDown as faSolidThumbsDown} from "@fortawesome/free-solid-svg-icons";
+
+/** 
+  This component is a card that contains a word and its informations, it's only used in the WordContainer component
+ */
+
 const Word = (props: {word: completeWord}) => {
     const [currentLike, setCurrentLike] = useState(props.word.user_like)
     const [numberLikes, setNumberLikes] = useState(props.word.likes)
@@ -99,8 +104,11 @@ const Word = (props: {word: completeWord}) => {
       </div>
     </div>
         )
-
 }
+
+/**
+ this component is a container that contains all the words, the goal is to show liked words, disliked words or popular words
+ */
 
 export default function WordContainer(listWord: completeWord[], onEnd: () => void) {
   return (

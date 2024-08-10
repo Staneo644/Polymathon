@@ -90,7 +90,7 @@ export default function Search() {
         ) : (
           <>
             <ThemeButton
-              themes={getParentThemes(themes)}
+              themes={getParentThemes(themes, true)}
               selectedTheme={selectedTheme}
               setSelectedTheme={handleSelectTheme}
             />

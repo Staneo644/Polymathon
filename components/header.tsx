@@ -27,7 +27,7 @@ function Header({ children }: { children: ReactNode }): JSX.Element {
       <footer className="relative w-full b-0 bg-gray-100 flex justify-evenly items-center">
         <FontAwesomeIcon icon={faHome} className={actualPage == '/' ? buttonTextureDownActived : buttonTextureDown} onClick={() => router.push('/')}/>
         <FontAwesomeIcon icon={faSearch} className={actualPage == '/search' ? buttonTextureDownActived : buttonTextureDown} onClick={() => router.push('/search')} />
-        <FontAwesomeIcon icon={faPlus} className={actualPage == '/more-worlds' ? buttonTextureDownActived : buttonTextureDown} onClick={() => router.push('/more-worlds')} />
+        <FontAwesomeIcon icon={faPlus} className={actualPage == '/more-words' ? buttonTextureDownActived : buttonTextureDown} onClick={() => router.push('/more-words')} />
       </footer>
     </>
   );
