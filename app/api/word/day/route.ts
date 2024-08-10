@@ -15,7 +15,6 @@ async function addWordOfTheDay(supabase: SupabaseClient, limit: number) {
   if (!select.data || select.error) return { error: select.error };
   const ids: any[] = select.data.map((word) => word.id);
 
-  console.log(select.data);
   const today = new Date().toISOString();
   const update = await supabase
     .from("word")

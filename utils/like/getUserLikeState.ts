@@ -8,6 +8,5 @@ export function getUserLikeState(
   const res = likes.find(
     (like) => like.word === word_id && like.user_id === user
   );
-  console.log(res);
   return res ? res.like : null;
 }
