@@ -22,7 +22,7 @@ async function hasToChange(
     .select("*")
     .eq("word", word_id)
     .single();
-  console.log(data, error, like);
+  console.log("in has to change: ", data, error, like);
   if (error || !data) return false;
   if (data.like === like) return false;
   return true;
@@ -55,25 +55,30 @@ export async function POST(request: NextRequest) {
   const supabase = createClient();
 
   const { id, like, error } = parseParamsPOST(request);
-  if (error || !id || !like) return NextResponse.json({ error });
+  console.log(id, like, error);
+  if (error || !id || like === undefined) return NextResponse.json({ error });
 
   const user_id = await getProfile(supabase);
   if (user_id.error || !user_id.data)
     return NextResponse.json({ error: user_id.error });
 
+  console.log("avant has to change");
   if (!(await hasToChange(supabase, id, like)))
     return NextResponse.json({ error: "Already in this state" });
 
+  console.log("avant destroy like");
   if (await destroyLike(supabase, id))
     return NextResponse.json({ error: "Error when deleting previous like" });
 
+  console.log("avant insert");
   const insert = await supabase.from("like").insert({
     user_id: user_id.data.id,
     word: id,
     like: like,
   });
 
+  console.log(insert);
   if (insert.error) return NextResponse.json({ error: insert.error });
 
-  return NextResponse.json({ data: "Mot liké" });
+  return NextResponse.json({ data: "Etat like du mot mis a: " + like });
 }
