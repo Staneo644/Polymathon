@@ -97,7 +97,7 @@ export default function form(
             definition === '' ||
             type === '' ||
             example === '' ||
-            theme === ''
+            theme === undefined
           ) {
             setCompleteField(true);
             return;
@@ -108,7 +108,7 @@ export default function form(
             definition: definition,
             type: type,
             example: example,
-            theme: theme,
+            theme: "",
             id: 0,
             last_day_word: "",
             likes: 0,

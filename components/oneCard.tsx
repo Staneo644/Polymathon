@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useState } from "react";
 import EtymologyComponent from "./etymology";
-import { faThumbsUp as faSolidThumbsUp, faThumbsDown as faSolidThumbsDown, faGreaterThan, faLessThan } from "@fortawesome/free-solid-svg-icons";
+import { faThumbsUp as faSolidThumbsUp, faThumbsDown as faSolidThumbsDown, faGreaterThan, faLessThan, faSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp as faRegularThumbsUp, faThumbsDown as faRegularThumbsDown} from "@fortawesome/free-regular-svg-icons";
 import { completeWord } from "@/utils/word/enrichWord";
@@ -159,8 +159,8 @@ const OneCard = forwardRef<HTMLDivElement, {word: completeWord, hideLikesDislike
 
   {biggerItem}
     </div>
-  <FontAwesomeIcon icon={faLessThan} className="cursor-pointer w-auto" onClick={handleLeft}/>
-    <FontAwesomeIcon icon={faGreaterThan} className="cursor-pointer" onClick={handleRigth}/>
+  <FontAwesomeIcon icon={faSlash} className="cursor-pointer -rotate-90" onClick={handleLeft}/>
+    <FontAwesomeIcon icon={faSlash} className="cursor-pointer -rotate-90 -scale-100 skew-y-12" onClick={handleRigth}/>
   </button>
   {
     props.hideLikesDislikes ? null :
