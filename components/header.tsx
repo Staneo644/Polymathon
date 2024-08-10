@@ -1,6 +1,6 @@
 'use client';
 import { useRouter, usePathname } from 'next/navigation';
-import { faCog, faUser, faSearch, faPlus, faHome } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faSearch, faPlus, faHome, faMessage } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactNode } from 'react';
 
@@ -14,14 +14,14 @@ function Header({ children }: { children: ReactNode }): JSX.Element {
   return (
     <>
       <header className="relative w-full bg-gray-100 p-2 flex justify-between items-center">  
-        <FontAwesomeIcon icon={faUser} className={buttonTexture + "ml-2"} onClick={() => router.push('/profile')}/>
+          <FontAwesomeIcon icon={faMessage} className={actualPage == '/contacte' ? (buttonTexture + "mr-1 text-3xl") : (buttonTexture + "mr-1")} onClick={() => router.push('/contacte')}/>
         <button
           className={buttonTexture + " font-bold font-serif italic"}
           onClick={() => router.push('/')}
         >
           Polymathon
         </button>
-        <FontAwesomeIcon icon={faCog} className={buttonTexture + "mr-1"} onClick={() => router.push('/option')}/>
+        <FontAwesomeIcon icon={faUser} className={actualPage == '/profile' ? (buttonTexture + "ml-2 text-3xl") : (buttonTexture + "ml-2")} onClick={() => router.push('/profile')}/>
       </header>
       {children}
       <footer className="relative w-full b-0 bg-gray-100 flex justify-evenly items-center">

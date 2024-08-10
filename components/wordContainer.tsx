@@ -43,18 +43,18 @@ const Word = (props: {word: completeWord}) => {
     
     return (
         <div
-      className="bg-white shadow-md rounded-lg mb-[45px] last:mb-0 text-gray-800"
+      className="bg-white shadow-md rounded-lg mb-[20px] last:mb-0 text-gray-800"
       style={{
         backgroundImage:
         "url(https://s2.qwant.com/thumbr/474x323/7/5/15e7a9bcd784af960fb05e85addd943f5f08a5259bb5803b58a1b3f39473cc/th.jpg?u=https%3A%2F%2Ftse.mm.bing.net%2Fth%3Fid%3DOIP.jytUH6XTOQ7pXAgURy6LYQHaFD%26pid%3DApi&q=0&b=1&p=0&a=0)",
-        borderRadius: '20px',
+        borderRadius: '40px',
         backgroundSize: "cover",
       }}
     >
-      <div className="mt-3 ml-2 text-xl italic font-serif">
+      <div className="mt-1 ml-2 text-xl italic font-serif">
       </div>
       <div className="flex items-center justify-center whitespace-pre">
-        <h3 className="font-bold italic font-serif text-2xl">
+        <h3 className="font-bold italic font-serif text-xl">
           {props.word.name}
         </h3>
         <h4 className="text-lg text-gray-600 italic">
@@ -63,8 +63,8 @@ const Word = (props: {word: completeWord}) => {
           {")"}
         </h4>
       </div>
-      <div className="mb-2 ml-2 flex justify-between items-center">
-        <div className="relative left-0 ml-2 mb-1">
+      <div className="mb-1 ml-2 flex justify-between items-center">
+        <div className="relative left-0 ml-2">
           <button
           className="p-1"
             onClick={() => {
@@ -82,7 +82,7 @@ const Word = (props: {word: completeWord}) => {
           {props.word.views} vues
         </p>
     
-        <div className="relative right-0 mr-2 mb-1">
+        <div className="relative right-0 mr-4 ">
           <button
             onClick={() => {
               likeWord(false);

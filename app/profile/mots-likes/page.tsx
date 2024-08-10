@@ -5,7 +5,7 @@ import WordContainer from "@/components/wordContainer";
 import { wordLimit } from "@/app/search/page";
 
 
-export default function Search() {
+export default function SearchLikedWords() {
   const [loadingWords, setLoadingWords] = useState(true);
   const [listWord, setListWord] = useState<completeWord[]>([]);
 
@@ -37,7 +37,6 @@ export default function Search() {
   };
 
   useEffect(() => {
-    setListWord([]);
     fetchData(true);
   }, []);
 

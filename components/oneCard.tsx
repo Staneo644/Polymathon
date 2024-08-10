@@ -26,13 +26,13 @@ style={{
 export const likeWordAPI = (id: number, like: boolean | null) =>
   fetch("http://localhost:3000/api/like?id=" + id + "&like=" + like, {method: 'POST'})
 
-const OneCard = forwardRef<HTMLDivElement, {word: completeWord}>(
+const OneCard = forwardRef<HTMLDivElement, {word: completeWord, hideLikesDislikes: boolean, hideDefinition: boolean}>(
   (props, ref) => {
     const listItems = [props.word.example, props.word.definition, props.word.etymology];
     const [biggerItem, setBiggerItem] = useState("")
     const [oldIndex, setOldIndex] = useState(1);
     const [currentIndex, setCurrentIndex] = useState(1);
-    const [visibleText, setVisibleText] = useState(false)
+    const [visibleText, setVisibleText] = useState(!props.hideDefinition)
     const [currentLike, setCurrentLike] = useState(props.word.user_like)
     const [numberLikes, setNumberLikes] = useState(props.word.likes)
     const [numberDislikes, setNumberDislikes] = useState(props.word.dislikes)
@@ -130,7 +130,7 @@ const OneCard = forwardRef<HTMLDivElement, {word: completeWord}>(
       {")"}
     </h4>
   </div>
-  <button className={"mb-2 ml-2 text-xl italic font-serif text-left" + (visibleText ? " cursor-default" : "")} onClick={() => (setVisibleText(true))}>
+  <button className={"mb-2 ml-2 text-xl italic font-serif text-left" + ((visibleText) ? " cursor-default" : "")} onClick={() => (setVisibleText(true))}>
   <div className={`duration-300 transition-transform ${ (visibleText ? " " : " invisible")}`}
     >
     <Explanation
@@ -162,14 +162,16 @@ const OneCard = forwardRef<HTMLDivElement, {word: completeWord}>(
   <FontAwesomeIcon icon={faLessThan} className="cursor-pointer w-auto" onClick={handleLeft}/>
     <FontAwesomeIcon icon={faGreaterThan} className="cursor-pointer" onClick={handleRigth}/>
   </button>
+  {
+    props.hideLikesDislikes ? null :
   <div className="mb-2 ml-2 flex justify-between items-center">
-    <div className="relative left-0 ml-2 mb-3 mt-2">
+    <div className="relative left-0 ml-2 mb-2 mt-2">
       <button
       className="p-1"
-        onClick={() => {
-          likeWord(true);
-        }}
-        >
+      onClick={() => {
+        likeWord(true);
+      }}
+      >
           {currentLike == true ? 
             <FontAwesomeIcon className="text-green-500 h-5" icon={faSolidThumbsUp}/> :
             <FontAwesomeIcon className="text-green-500" icon={faRegularThumbsUp}/>
@@ -181,7 +183,7 @@ const OneCard = forwardRef<HTMLDivElement, {word: completeWord}>(
       {props.word.views} vues
     </p>
 
-    <div className="relative right-0 mr-2 mb-3 mt-2">
+    <div className="relative right-0 mr-2 mb-2 mt-2">
       <button
         onClick={() => {
           likeWord(false);
@@ -196,6 +198,7 @@ const OneCard = forwardRef<HTMLDivElement, {word: completeWord}>(
       {/*'(' + this.word.negative_note + ')'*/}
     </div>
   </div>
+  }
 </div>
     )
 }

@@ -1,16 +1,11 @@
 import { FC, ReactNode } from "react";
 
 
-export const Button: FC<{ onClick: () => void; children: ReactNode; category : "Menu" | "Header"}> = ({ children, onClick, category }) => {
-  const menuClassname = "bg-amber-700 w-1/3 min-w-[200px] max-w-[900px] shadow-2xl h-12 lg:h-16 rounded-lg hover:bg-amber-600 active:bg-amber-800 duration-300 text-2xl lg:text-3xl border-2 border-gray-600";
-  const headerClassname = "p-4 hover:bg-gray-700 cursor-pointer";
-
-  return (
+export const YellowButton: FC<{ onClick: () => void; children: ReactNode; inactive?:boolean; className?:string }> = ({ children, onClick, inactive, className }) => 
     <button
-      className={category === "Menu" ? menuClassname : headerClassname}
+      className={`text-white bg-${inactive ?  "gray-400 cursor-default" :"[var(--yellow)] hover:bg-[var(--light-yellow)] active:bg-[var(--dark-yellow)]"} font-bold py-2 px-4 ${className}`}
       onClick={onClick}
     >
       {children}
     </button>
-  );
-}
+

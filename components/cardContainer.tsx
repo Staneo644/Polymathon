@@ -15,6 +15,8 @@ const CardContainer = (
   const [isFollowing, setIsFollowing] = useState(false);
   const [clickPoint, setClickPoint] = useState(0);
   const [position, setPosition] = useState(0);
+  const hideLikesDislikes = localStorage.getItem('hideLikesDislikes') == 'true';
+  const hideDefinition = localStorage.getItem('hideDefinition') == 'true';
   
   const moveUp = () => {
     setStartIndex((prevIndex) => {
@@ -109,6 +111,8 @@ const CardContainer = (
             key={index}
             word={card}
             ref={(el) => {cardsRefs.current[index] = el}}
+            hideLikesDislikes={hideLikesDislikes}
+            hideDefinition={hideDefinition}
           />
         ))}
       </div>

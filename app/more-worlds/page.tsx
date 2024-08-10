@@ -1,5 +1,6 @@
 "use client";
 
+import { YellowButton } from "@/components/button";
 import { useState, useEffect } from "react";
 
 export default function MoreWorld () {
@@ -37,8 +38,10 @@ export default function MoreWorld () {
     </div>
         </div>
         <div className="flex items-center w-full b-4 flex-col"> 
-          <button className={`text-white bg-${inputValue.length > 0 ? "[var(--yellow)] active:bg-[var(--dark-yellow)]" : "gray-400 cursor-default"} font-bold py-2 px-4 rounded-full mt-4`}>Ajouter</button>
-          
+          <YellowButton onClick={() => {}} inactive={inputValue.length == 0} className={"font-bold py-2 px-4 rounded-full mt-4"}>
+            Ajouter
+            </YellowButton>
+
         </div>
         </>
     )

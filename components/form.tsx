@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { completeWord } from '@/app/api/word/route';
+import { completeWord } from '@/utils/word/enrichWord';
 
 
 export default function form(
@@ -105,6 +105,10 @@ export default function form(
             theme: theme,
             id: 0,
             last_day_word: "",
+            likes: 0,
+            dislikes: 0,
+            views: 0,
+            user_like: null,
           });
         }}
       >

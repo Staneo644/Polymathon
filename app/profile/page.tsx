@@ -7,6 +7,18 @@ import { useState } from "react";
 export default function Profile() {
     const router = useRouter();
     const [showLogout, setShowLogout] = useState(false);
+    const [statusHideDefinition, setStatusHideDefinition] = useState(localStorage.getItem('hideDefinition') == 'true');
+    const [statusHideLikesDislikes, setStatusHideLikesDislikes] = useState(localStorage.getItem('hideLikesDislikes') == 'true');
+
+    const hideDefinition = (e: any) => {
+        localStorage.setItem('hideDefinition', e.target.checked);
+        setStatusHideDefinition(e.target.checked);
+    }
+
+    const hideLikesDislikes = (e: any) => {
+        localStorage.setItem('hideLikesDislikes', e.target.checked);
+        setStatusHideLikesDislikes(e.target.checked);
+    }
 
     const SeeButton = ({ newURL }: {newURL: string}) => (
       <button className="bg-[var(--blue)] rounded-full px-2 py-1" onClick={() => router.push(newURL)}>
@@ -32,12 +44,12 @@ export default function Profile() {
         
         <div className="flex justify-between mt-4">
         <p>Cliquer pour montrer la définition</p>
-        <input type="checkbox" className="ml-2"/>
+        <input type="checkbox" className="ml-2" onChange={hideDefinition} checked={statusHideDefinition}/>
         </div>
         <hr className="m-4" />
         <div className="flex justify-between">
         <p>Cacher les likes et les dislikes</p>
-        <input type="checkbox" className="ml-2" />
+        <input type="checkbox" className="ml-2" onChange={hideLikesDislikes} checked={statusHideLikesDislikes}/>
 
         </div>
     <hr className="m-4" />
