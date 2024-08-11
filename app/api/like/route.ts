@@ -22,7 +22,8 @@ async function hasToChange(
     .select("*")
     .eq("word", word_id)
     .single();
-  if (error || !data) return false;
+  if (!data) return true;
+  if (error) return false;
   if (data.like === like) return false;
   return true;
 }
@@ -61,7 +62,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: user_id.error });
 
   if (!(await hasToChange(supabase, id, like)))
-    return NextResponse.json({ error: "Already in this state" });
+    return NextResponse.json(
+      { error: "Already in this state: " + like },
+      { status: 400 }
+    );
 
   if (await destroyLike(supabase, id))
     return NextResponse.json({ error: "Error when deleting previous like" });

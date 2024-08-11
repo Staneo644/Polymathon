@@ -4,6 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { getTheme, getThemes } from "@/utils/theme/getThemes";
 import { getViews } from "@/utils/view/getViews";
 import { enrichWord } from "@/utils/word/enrichWord";
+import { getPopularWords } from "@/utils/word/getPopularWord";
 import { getWorldByThemeLimited } from "@/utils/word/getWorldByTheme";
 import { WordRow } from "@/utils/word/word";
 import { NextRequest, NextResponse } from "next/server";
@@ -74,5 +75,8 @@ export async function GET(request: NextRequest) {
     profile.data,
     views.data
   );
+
+  const fun = await getPopularWords(supabase);
+  console.log(fun);
   return NextResponse.json({ data: final });
 }
