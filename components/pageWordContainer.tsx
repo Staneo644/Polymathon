@@ -1,29 +1,25 @@
-"use client";
 import { useState, useEffect } from "react";
 import { completeWord } from "@/utils/word/enrichWord";
-import WordContainer from "@/components/wordContainer";
+import {WordContainer} from "@/components/wordContainer";
 import { wordLimit } from "@/app/search/page";
 
-export default function SearchLikedWords() {
+const ParamsWord = new URLSearchParams({ limit: wordLimit.toString() });
+
+export function PageWordContainer(apiUrl: string) {
   const [loadingWords, setLoadingWords] = useState(true);
   const [listWord, setListWord] = useState<completeWord[]>([]);
 
-  const fetchData = async (empty?: Boolean) => {
+  const fetchData = async () => {
     setLoadingWords(true);
     try {
-      await fetch("/api/word?limit=" + wordLimit)
+      await fetch(`${apiUrl}?${ParamsWord}`)
         .then((res) => res.json())
         .then((data) => {
           if (data.error) {
             console.error("Erreur: ", data.error);
             return;
           }
-          if (empty) {
-            setListWord([]);
-            setListWord(data.data);
-          } else {
-            setListWord([...listWord, ...data.data]);
-          }
+          setListWord(data.data);
           setLoadingWords(false);
         });
     } catch (error) {
@@ -32,7 +28,7 @@ export default function SearchLikedWords() {
   };
 
   useEffect(() => {
-    fetchData(true);
+    fetchData();
   }, []);
 
   return (

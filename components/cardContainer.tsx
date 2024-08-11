@@ -2,6 +2,7 @@ import { completeWord } from "@/utils/word/enrichWord";
 import { useState, useEffect, useRef } from "react";
 import { wordLimit, wordNewCall } from "@/app/search/page";
 import OneCard from "./oneCard";
+import { useSearchParams } from "next/navigation";
 
 const CardContainer = (
   list: completeWord[],
@@ -27,7 +28,7 @@ const CardContainer = (
   };
 
   const moveDown = async () => {
-    fetch("http://localhost:3000/api/view?id=" + list[startIndex].id, {
+    fetch(`http://localhost:3000/api/view?${new URLSearchParams({id: list[startIndex].id.toString()})}` + list[startIndex].id, {
       method: "POST",
     }).catch((e: any) => {
       console.error("erreur: ", e);

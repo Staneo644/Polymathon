@@ -22,7 +22,7 @@ const ThemeButton: FC<ThemeButtonProps> = ({
       {themes.map((theme) => (
         <button
           key={theme.id}
-          className={`px-4 py-2 rounded-full ${
+          className={`px-4 py-2 rounded-full shadow-md ${
             selectedTheme?.id === theme.id
               ? "bg-[var(--blue)] text-white"
               : "bg-gray-400"

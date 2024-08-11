@@ -12,6 +12,7 @@ import CardContainer from "@/components/cardContainer";
 
 export const wordLimit = 9;
 export const wordNewCall = 6;
+export const ParamsWord = new URLSearchParams({ limit: wordLimit.toString() });
 
 function getNomTheme(selectedTheme: ThemeRow, sousSelectedTheme: ThemeRow) {
   if (selectedTheme.name === "Tous") return "";
@@ -47,8 +48,8 @@ export default function Search() {
       const theme = getNomTheme(selectedTheme, sousSelectedTheme);
       await fetch(
         theme
-          ? "/api/word?limit=" + wordLimit + "&theme=" + theme
-          : "api/word?limit=" + wordLimit
+          ? `api/word?${ParamsWord.append("theme", theme)}`
+          : `api/word?${ParamsWord}`
       )
         .then((res) => res.json())
         .then((data) => {
@@ -81,7 +82,7 @@ export default function Search() {
 
   return (
     <>
-      <div className="bg-[var(--yellow)] p-4">
+      <div className="bg-[var(--yellow)] p-4 shadow-md">
         {loadingThemes || !themes ? (
           <p>Chargement...</p>
         ) : (
@@ -98,7 +99,7 @@ export default function Search() {
         !loadingThemes &&
         themes &&
         getChildrenThemes(themes, selectedTheme.id).length !== 0 && (
-          <div className="bg-[var(--dark-yellow)] p-4">
+          <div className="bg-[var(--dark-yellow)] p-4 shadow-md">
             <ThemeButton
               themes={getChildrenThemes(themes, selectedTheme.id)}
               selectedTheme={sousSelectedTheme}

@@ -40,9 +40,9 @@ export default function Profile() {
         setStatusHideLikesDislikes(e.target.checked);
     }
 
-    const SeeButton = ({ newURL }: {newURL: string}) => (
-      <button className="bg-[var(--blue)] rounded-full px-2 py-1" onClick={() => router.push(newURL)}>
-        Voir
+    const SeeButton = ({ newURL, content, className }: {newURL: string; content?:string; className?:string}) => (
+      <button className={"bg-[var(--blue)] rounded-full px-2 py-1 " + className} onClick={() => router.push(newURL)}>
+        {content ? content : "Voir"}
       </button>
     );
     return (
@@ -80,17 +80,21 @@ export default function Profile() {
         <div className="w-3/4 mx-auto mt-4">
         <div className="flex justify-between">
         Mots vues : {seenWords}
-        <SeeButton newURL="/profile/mots-vus" />
         </div>
         <div className="flex justify-between mt-2">
 
-        Mots likés : {likedWords}
-        <SeeButton newURL="/profile/mots-likes" />
+        Mots favoris : {likedWords}
+        <SeeButton newURL="/profile/mots-favoris" />
         </div>
         <div className="flex justify-between mt-2">
 
-        Mots dislikés : {dislikedWords}
-        <SeeButton newURL="/profile/mots-dislikes" />
+        Mots désapprouvés : {dislikedWords}
+        <SeeButton newURL="/profile/mots-desapprouves" />
+        </div>
+        <div className="flex justify-between mt-2">
+
+        <SeeButton newURL="/statistiques-generales/mots-populaires" content="Les plus populaires" className="mr-2"/>
+        <SeeButton newURL="/statistiques-generales/mots-impopulaires" content="Les moins populaires" className="ml-4"/>
         </div>
         </div>
         </>

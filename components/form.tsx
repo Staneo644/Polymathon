@@ -17,19 +17,23 @@ export default function form(
   const [etymology, setetymology] = useState('');
   const [example, setExample] = useState('');
   const [type, setType] = useState('');
-  const [theme, setTheme] = useState<ThemeRow>();
+  const [theme, setTheme] = useState("");
   const [completeField, setCompleteField] = useState(false);
 
   
 
   useEffect(() => {
+    if (word === null) {
+
     setSearchWord(name);
-    if (word === null) return;
-    setDefinition(word.definition);
-    setetymology(word.etymology);
-    setExample(word.example ?? "");
-    setType(word.type);
-    //setTheme(word.theme ?? undefined);
+    } else {
+      setSearchWord(word.name);
+      setDefinition(word.definition);
+      setetymology(word.etymology);
+      setExample(word.example ?? "");
+      setType(word.type);
+      setTheme(word.theme ?? "");
+    }
   }, [name, word]);
 
   return (
@@ -64,7 +68,7 @@ export default function form(
         <option value="expr">Expression</option>
         <option value="autre">Autre</option>
       </select>
-      <CustomSelect setCurrent={(current: ThemeRow) => setTheme(current)} current={theme}/>
+      <CustomSelect setCurrent={(current: string) => setTheme(current)} current={theme}/>
       <textarea
         placeholder="Définition"
         className="border rounded p-2 custom-width"

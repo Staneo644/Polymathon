@@ -13,9 +13,12 @@ export default function MoreWorlds() {
         const addWord = async (word: completeWord) => {
           //createPotentialWord(word, -1);
         };
+        const param = new URLSearchParams(
+          {word: wordName}
+        );
 
         useEffect(() => {
-          fetch("http://localhost:3000/api/word?word=" + wordName, {method: 'GET'}).then((response) => {
+          fetch(`http://localhost:3000/api/word?${param}` + wordName, {method: 'GET'}).then((response) => {
             if (response.ok) {
               response.json().then((data) => {
                 setWord(data);

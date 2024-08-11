@@ -3,8 +3,6 @@ import EtymologyComponent from "./etymology";
 import {
   faThumbsUp as faSolidThumbsUp,
   faThumbsDown as faSolidThumbsDown,
-  faGreaterThan,
-  faLessThan,
   faSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -45,20 +43,25 @@ const Explanation = (props: Props) => (
 
 const Arrow = (props: {directionRight: boolean, onClick: () => void}) => 
   
-  <button onClick={props.onClick} className="absolute">
+  <button onClick={props.onClick} className={`absolute ${props.directionRight ? "right-2 inset-1/2 transform -translate-x-1/2" : "left-0 -translate-x-4 inset-1/2 transform -translate-x-1/2"}`}
+  style={{
+    transform: `${props.directionRight ? "translateX(4.5rem)" : "translateX(-6.2rem) translateY(-1rem)"} `,
+  }}
+  >
+
     <FontAwesomeIcon icon={faSlash} 
     style={
-      {transform: `rotate(-90deg) ${props.directionRight ? "" : "scaleX(-1) translateX(88%) translateY(120%)"} `}
+      {transform: `rotate(-90deg) ${props.directionRight ? "" : "scaleX(-1) translateX(82%) translateY(120%)"} `}
     }/>
     <FontAwesomeIcon icon={faSlash} className="absolute"
       style={
-        {transform: `rotate(-90deg) ${props.directionRight ? "scaleX(-1) translateX(-88%) translateY(-120%)" : ""} `} 
+        {transform: `rotate(-90deg) ${props.directionRight ? "scaleX(-1) translateX(-82%) translateY(-120%)" : ""} `} 
       }
     />
   </button>
 
 export const likeWordAPI = (id: number, like: boolean | null) =>
-  fetch("http://localhost:3000/api/like?id=" + id + "&like=" + like, {
+  fetch(`http://localhost:3000/api/like?${new URLSearchParams({id: id.toString(), like: like ? "true" : "false"})}`, {
     method: "POST",
   });
 
@@ -164,7 +167,7 @@ export const likeWordAPI = (id: number, like: boolean | null) =>
       </h3>
       <h4 className="text-lg text-gray-600 italic">
         {"  ("}
-        {props.word.type}
+        {props.word.type} 
         {")"}
       </h4>
     </div>
@@ -193,14 +196,15 @@ export const likeWordAPI = (id: number, like: boolean | null) =>
         isVisible={currentIndex == 0 || oldIndex == 0}
         />
     </div>
-      <div className='invisible'>
+      <div className='relative'>
   
+  <div className="invisible">
+
     {biggerItem}
+  </div>
+      <Arrow directionRight={false} onClick={handleLeft}/>
+      <Arrow directionRight={true} onClick={handleRigth}/>
       </div>
-    <FontAwesomeIcon icon={faSlash} className="cursor-pointer -rotate-90" onClick={handleLeft}/>
-      <FontAwesomeIcon icon={faSlash} className="cursor-pointer -rotate-90 -scale-100 skew-y-12" onClick={handleRigth}/>
-      <Arrow directionRight={true} onClick={handleLeft}/>
-      <Arrow directionRight={false} onClick={handleRigth}/>
     </button>
     {
       props.hideLikesDislikes ? null :

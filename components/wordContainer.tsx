@@ -110,7 +110,7 @@ const Word = (props: {word: completeWord}) => {
  this component is a container that contains all the words, the goal is to show liked words, disliked words or popular words
  */
 
-export default function WordContainer(listWord: completeWord[], onEnd: () => void) {
+export function WordContainer(listWord: completeWord[], onEnd: () => void) {
   return (
     <div className="h-[calc(100vh-92px)] overflow-scroll">
         <br />

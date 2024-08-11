@@ -4,7 +4,7 @@ import { getParentThemes, getChildrenThemes, hasChildren } from "@/utils/theme/c
 import {faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
-export const CustomSelect: FC<{setCurrent: (option: ThemeRow) => void, current?: ThemeRow}> = ({setCurrent, current}) => {
+export const CustomSelect: FC<{setCurrent: (option: string) => void, current?: string}> = ({setCurrent, current}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedParentOptionId, setSelectedParentOptionId] = useState<number>();
     const [parentThemes, setParentThemes] = useState<ThemeRow[]>();
@@ -30,7 +30,7 @@ export const CustomSelect: FC<{setCurrent: (option: ThemeRow) => void, current?:
     return (
       <div className="custom-select-container">
         <button onClick={toggleOpen} className="bg-gray-100 p-2 rounded-md  w-60 flex justify-between">
-          {current ? current.name : 'Sélectionner une option'}
+          {current ? current : 'Sélectionner une option'}
             <FontAwesomeIcon icon={isOpen ? faChevronUp : faChevronDown} className="mx-2"/>
         </button>
         {isOpen && (
@@ -39,7 +39,7 @@ export const CustomSelect: FC<{setCurrent: (option: ThemeRow) => void, current?:
                 hasChildren(themes ?? [], option.id) ?
                 <>
                 <li
-                        key={index}
+                        key={option.id}
                         onClick={() => {selectedParentOptionId == option.id ? setSelectedParentOptionId(0) : setSelectedParentOptionId(option.id)}}
                         className="custom-select-option flex justify-between p-2 cursor-button"
                         >
@@ -56,8 +56,8 @@ export const CustomSelect: FC<{setCurrent: (option: ThemeRow) => void, current?:
                                     <>
                                     <li
                                     
-                                    key={index}
-                                    onClick={() => {setCurrent(option) ; setIsOpen(false); setSelectedParentOptionId(0)}}
+                                    key={option.id}
+                                    onClick={() => {setCurrent(option.name) ; setIsOpen(false); setSelectedParentOptionId(0)}}
                                     className="custom-select-option flex justify-between p-2 bg-gray-100 rounded-md pointer"
                                     >
                                     {option.name}
@@ -72,8 +72,8 @@ export const CustomSelect: FC<{setCurrent: (option: ThemeRow) => void, current?:
                     </>
                     :
                     <li
-                        key={index}
-                        onClick={() => {setCurrent(option) ; setIsOpen(false); setSelectedParentOptionId(0)}}
+                        key={option.id}
+                        onClick={() => {setCurrent(option.name) ; setIsOpen(false); setSelectedParentOptionId(0)}}
                         className="custom-select-option flex justify-between p-2"
                         >
                     {option.name}
