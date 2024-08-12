@@ -55,11 +55,12 @@ export async function POST(request: NextRequest) {
   const supabase = createClient();
 
   const { id, like, error } = parseParamsPOST(request);
-  if (error || !id || like === undefined) return NextResponse.json({ error });
+  if (error || !id || like === undefined)
+    return NextResponse.json({ error }, { status: 400 });
 
   const user_id = await getProfile(supabase);
   if (user_id.error || !user_id.data)
-    return NextResponse.json({ error: user_id.error });
+    return NextResponse.json({ error: user_id.error }, { status: 503 });
 
   if (!(await hasToChange(supabase, id, like)))
     return NextResponse.json(
