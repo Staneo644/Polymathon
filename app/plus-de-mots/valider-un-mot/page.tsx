@@ -4,7 +4,6 @@ import form from "@/components/form";
 import { ThemeRow } from "@/utils/theme/theme";
 import { completeWord } from "@/utils/word/completeWord";
 import { NewWord } from "@/utils/word/newWord";
-import { id } from "date-fns/locale";
 import { useEffect, useState } from "react";
 
 const findTheme = (theme: number, themes: ThemeRow[]) => {
@@ -123,6 +122,20 @@ export default function validateWords() {
       });
 
     // valider le mot
+
+    fetch(`http://localhost:3000/api/word/validate`, {
+      method: "PATCH",
+      body: JSON.stringify({ id: w.id, validated: true }),
+    })
+      .then(async (response) => {
+        return await response.json();
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((e) => {
+        console.error("erreur: ", e);
+      });
   };
 
   const rejectWord = async () => {
