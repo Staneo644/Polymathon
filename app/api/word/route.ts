@@ -1,4 +1,4 @@
-import { getProfile } from "@/utils/profile/getProfile";
+import { getProfile, getUserId } from "@/utils/profile/getProfile";
 import { createClient } from "@/utils/supabase/server";
 import { getThemes } from "@/utils/theme/getThemes";
 import { ThemeRow } from "@/utils/theme/theme";
@@ -70,85 +70,112 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const { data, error } = await supabase.from("word").insert([
-    {
-      name,
-      definition,
-      type,
-      etymology,
-      example,
-      theme,
-    },
-  ]);
+  const { data, error } = await supabase
+    .from("word")
+    .insert([
+      {
+        name,
+        definition,
+        type,
+        etymology,
+        example,
+        theme,
+      },
+    ])
+    .select("id")
+    .single();
 
-  if (error) {
+  const user_id = await getUserId(supabase);
+
+  if (error || !data || !data.id || !user_id) {
     return NextResponse.json(
-      { error: "db error: " + error.message },
+      { error: "db error: " + error?.message },
       { status: 500 }
     );
   }
 
-  /*
-  const { error: errorContribution } = await supabase.from("contribution").insert({
+  const { error: errorContribution } = await supabase
+    .from("contribution")
+    .insert([{ word: data.id, type: "create", user_id: user_id }]);
 
-  })
-*/
-  return NextResponse.json({ data }, { status: 201 });
+  if (errorContribution)
+    return NextResponse.json(
+      {
+        error: "error contribution:" + errorContribution.message,
+      },
+      { status: 500 }
+    );
+  return NextResponse.json({ data: data.id }, { status: 201 });
 }
 
 /**
- * Valider ou invalider un mot en tant qu'admin
- * @param Prends un json contentant {id: number, validated: boolean}
+ * Modifier une proposition de mot
+ * @param prends un json contentant {name: string, definition: string, type: string, etymology: string, example: string, theme: number}
  * @returns data ou error en succes ou reussite
  */
 export async function PATCH(request: NextRequest) {
   const supabase = createClient();
-  const { id, validated } = await request.json();
+  const { id, name, definition, type, etymology, example, theme } =
+    await request.json();
 
-  if (!id || validated === undefined) {
+  const profile = await getProfile(supabase);
+  if (profile.error || !profile.data)
+    return NextResponse.json({ error: profile.error });
+
+  if (profile.data.admin === false)
+    return NextResponse.json(
+      { error: "You are not an admin" },
+      { status: 403 }
+    );
+
+  if (
+    !id ||
+    !name ||
+    !definition ||
+    !type ||
+    !etymology ||
+    !example ||
+    !theme
+  ) {
     return NextResponse.json(
       { error: "Missing required fields" },
       { status: 400 }
     );
   }
 
-  const profile = await getProfile(supabase);
-  if (!profile.data || !profile.data.admin) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
-  }
-
-  // Mettez à jour le mot dans la base de données
   const { data, error } = await supabase
     .from("word")
-    .update({ validated })
+    .update([
+      {
+        name,
+        definition,
+        type,
+        etymology,
+        example,
+        theme,
+      },
+    ])
     .eq("id", id);
 
-  if (error) {
+  const user_id = await getUserId(supabase);
+
+  if (error || !data || !user_id) {
     return NextResponse.json(
-      { error: "db error: " + error.message },
+      { error: "db error: " + error?.message },
       { status: 500 }
     );
   }
 
-  // Supprimer les mots avec le meme nom au cas ou ca remplace
-  const select = await supabase.from("word").select().eq("id", id).single();
-  if (select.error) {
-    return NextResponse.json(
-      { error: "db error selecting word by id: " + select.error.message },
-      { status: 500 }
-    );
-  }
-  const deletereq = await supabase
-    .from("word")
-    .delete()
-    .eq("name", select.data.name)
-    .neq("id", id);
-  if (deletereq.error) {
-    return NextResponse.json(
-      { error: "db error deleting word by name: " + deletereq.error.message },
-      { status: 500 }
-    );
-  }
+  const { error: errorContribution } = await supabase
+    .from("contribution")
+    .insert([{ word: id, type: "validate", user_id: user_id }]);
 
-  return NextResponse.json({ data }, { status: 200 });
+  if (errorContribution)
+    return NextResponse.json(
+      {
+        error: "error contribution:" + errorContribution.message,
+      },
+      { status: 500 }
+    );
+  return NextResponse.json({ data: "success" }, { status: 201 });
 }
