@@ -1,5 +1,4 @@
 import { createClient } from "@/utils/supabase/server";
-import { getPopularWords } from "@/utils/word/getPopularWord";
 import { NextRequest, NextResponse } from "next/server";
 
 async function parseParamsGET(
