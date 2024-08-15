@@ -159,7 +159,7 @@ export async function PATCH(request: NextRequest) {
 
   const user_id = await getUserId(supabase);
 
-  if (error || !data || !user_id) {
+  if (error || !user_id) {
     return NextResponse.json(
       { error: "db error: " + error?.message },
       { status: 500 }
