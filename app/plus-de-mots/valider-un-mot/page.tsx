@@ -116,30 +116,47 @@ export default function validateWords() {
       })
       .then((data) => {
         console.log(data);
+        if (data.error) return;
+        fetch(`http://localhost:3000/api/word/validate`, {
+          method: "PATCH",
+          body: JSON.stringify({ id: w.id, validated: true }),
+        })
+          .then(async (response) => {
+            return await response.json();
+          })
+          .then((data) => {
+            console.log(data);
+            if (data.error) return;
+            setIndex(index + 1);
+          })
+          .catch((e) => {
+            console.error("erreur: ", e);
+          });
       })
       .catch((e) => {
         console.error("erreur: ", e);
       });
 
     // valider le mot
+  };
 
-    fetch(`http://localhost:3000/api/word/validate`, {
+  const rejectWord = async () => {
+    const w = words[index];
+    fetch(`http://localhost:3000/api/word/refuse`, {
       method: "PATCH",
-      body: JSON.stringify({ id: w.id, validated: true }),
+      body: JSON.stringify({ id: w.id }),
     })
       .then(async (response) => {
         return await response.json();
       })
       .then((data) => {
         console.log(data);
+        if (data.error) return;
+        setIndex(index + 1);
       })
       .catch((e) => {
         console.error("erreur: ", e);
       });
-  };
-
-  const rejectWord = async () => {
-    //createPotentialWord(word, -1);
   };
 
   return (

@@ -33,5 +33,8 @@ export async function PATCH(request: NextRequest) {
     );
   }
 
-  return NextResponse.json({ data }, { status: 200 });
+  return NextResponse.json(
+    { data: "successfully refused: " + id },
+    { status: 200 }
+  );
 }
