@@ -1,5 +1,4 @@
 import { createClient } from "@/utils/supabase/server";
-import { getPopularWords } from "@/utils/word/getPopularWord";
 import { NextRequest, NextResponse } from "next/server";
 
 async function parseParamsGET(
@@ -38,7 +37,8 @@ export async function GET(request: NextRequest) {
   const { limit, error } = await parseParamsGET(request);
 
   if (error || !limit) return NextResponse.json({ error });
-  const fun = await supabase.rpc("get_popular_words", {
+
+  const fun = await supabase.rpc("get_unpopular_words", {
     limit_count: limit,
   });
   if (fun.error) return NextResponse.json({ error: fun.error.message });
