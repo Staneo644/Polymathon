@@ -18,6 +18,25 @@ function parseParamsPOST(request: NextRequest): {
   return { id: idNumber };
 }
 
+function isToday(timestamp: number): boolean {
+  const date = new Date(timestamp);
+
+  const today = new Date();
+  const startOfToday = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  );
+
+  const startOfDate = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate()
+  );
+
+  return startOfToday.getTime() === startOfDate.getTime();
+}
+
 export async function POST(request: NextRequest) {
   const supabase = createClient();
 
@@ -28,8 +47,23 @@ export async function POST(request: NextRequest) {
   if (user_id.error || !user_id.data)
     return NextResponse.json({ error: user_id.error });
 
+  const select = await supabase
+    .from("views")
+    .select()
+    .eq("word", id)
+    .eq("user_id", user_id.data.id);
+
+  if (select.error) return NextResponse.json({ error: select.error });
+
+  if (select.data.filter((v) => isToday(v.created_at)).length > 0) {
+    console.log("deja vu");
+    return NextResponse.json({
+      data: "vue non comptée, car deja vu aujourd'hui",
+    });
+  }
+
   const insert = await supabase.from("views").insert({
-    user: user_id.data.id,
+    user_id: user_id.data.id,
     word: id,
   });
 

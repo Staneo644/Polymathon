@@ -13,6 +13,7 @@ export function PageWordContainer(apiUrl: string) {
       await fetch(`${apiUrl}?${ParamsWord}`)
         .then((res) => res.json())
         .then((data) => {
+          console.log(data);
           if (data.error) {
             console.error("Erreur: ", data.error);
             return;
