@@ -88,6 +88,11 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  /*
+  const { error: errorContribution } = await supabase.from("contribution").insert({
+
+  })
+*/
   return NextResponse.json({ data }, { status: 201 });
 }
 
