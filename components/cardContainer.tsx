@@ -1,4 +1,4 @@
-import { completeWord } from "@/utils/word/enrichWord";
+import { completeWord } from "@/utils/word/completeWord";
 import { useState, useEffect, useRef } from "react";
 import { wordLimit, wordNewCall } from "@/app/search/page";
 import OneCard from "./oneCard";
@@ -28,9 +28,12 @@ const CardContainer = (
   };
 
   const moveDown = async () => {
-    fetch(`http://localhost:3000/api/view?${new URLSearchParams({id: list[startIndex].id.toString()})}`, {
-      method: "POST",
-    }).catch((e: any) => {
+    fetch(
+      `http://localhost:3000/api/view?${new URLSearchParams({ id: list[startIndex].id.toString() })}`,
+      {
+        method: "POST",
+      }
+    ).catch((e: any) => {
       console.error("erreur: ", e);
     });
     setStartIndex((prevIndex) => {

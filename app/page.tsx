@@ -2,7 +2,7 @@
 
 import "./globals.css";
 import { useEffect, useState } from "react";
-import { completeWord } from "@/utils/word/enrichWord";
+import { completeWord } from "@/utils/word/completeWord";
 import CardContainer from "@/components/cardContainer";
 
 export default function Home() {

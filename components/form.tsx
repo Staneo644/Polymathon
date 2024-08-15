@@ -1,31 +1,27 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { completeWord } from '@/utils/word/enrichWord';
-import { ThemeRow } from '@/utils/theme/theme';
-import { CustomSelect } from './customSelect';
-
+import { useEffect, useState } from "react";
+import { completeWord } from "@/utils/word/completeWord";
+import { ThemeRow } from "@/utils/theme/theme";
+import { CustomSelect } from "./customSelect";
 
 export default function form(
   name: string,
   word: completeWord | null,
   click: (word: completeWord) => void,
-  reject: null | (() => void),
+  reject: null | (() => void)
 ): JSX.Element {
-  const [searchWord, setSearchWord] = useState('');
-  const [definition, setDefinition] = useState('');
-  const [etymology, setetymology] = useState('');
-  const [example, setExample] = useState('');
-  const [type, setType] = useState('');
+  const [searchWord, setSearchWord] = useState("");
+  const [definition, setDefinition] = useState("");
+  const [etymology, setetymology] = useState("");
+  const [example, setExample] = useState("");
+  const [type, setType] = useState("");
   const [theme, setTheme] = useState("");
   const [completeField, setCompleteField] = useState(false);
 
-  
-
   useEffect(() => {
     if (word === null) {
-
-    setSearchWord(name);
+      setSearchWord(name);
     } else {
       setSearchWord(word.name);
       setDefinition(word.definition);
@@ -47,7 +43,7 @@ export default function form(
       />
       <select
         className={`border rounded p-2 custom-width ${
-          type === '' ? 'text-gray-400' : ''
+          type === "" ? "text-gray-400" : ""
         }`}
         onChange={(e) => setType(e.target.value)}
         value={type}
@@ -56,7 +52,7 @@ export default function form(
           value=""
           disabled
           hidden
-          style={{ fontStyle: 'italic', color: 'grey' }}
+          style={{ fontStyle: "italic", color: "grey" }}
         >
           Selectionnez
         </option>
@@ -68,7 +64,10 @@ export default function form(
         <option value="expr">Expression</option>
         <option value="autre">Autre</option>
       </select>
-      <CustomSelect setCurrent={(current: string) => setTheme(current)} current={theme}/>
+      <CustomSelect
+        setCurrent={(current: string) => setTheme(current)}
+        current={theme}
+      />
       <textarea
         placeholder="Définition"
         className="border rounded p-2 custom-width"
@@ -96,11 +95,11 @@ export default function form(
         className="bg-blue-500 text-white py-2 px-4 rounded custom-width"
         onClick={() => {
           if (
-            searchWord == '' ||
-            etymology == '' ||
-            definition === '' ||
-            type === '' ||
-            example === '' ||
+            searchWord == "" ||
+            etymology == "" ||
+            definition === "" ||
+            type === "" ||
+            example === "" ||
             theme === undefined
           ) {
             setCompleteField(true);

@@ -1,8 +1,8 @@
 -- Supprimer la fonction existante
-DROP FUNCTION IF EXISTS get_word_by_theme(INTEGER, INTEGER);
+DROP FUNCTION IF EXISTS get_unvalidated_word(INTEGER);
 
 -- Créer ou remplacer la fonction
-CREATE OR REPLACE FUNCTION get_word_by_theme(limit_count INTEGER, theme_id INTEGER)
+CREATE OR REPLACE FUNCTION get_unvalidated_word(limit_count INTEGER)
 RETURNS TABLE (
   id BIGINT,
   name VARCHAR,
@@ -46,17 +46,10 @@ BEGIN
      WHERE views.word = w.id) AS views
   FROM
     word w
-  WHERE
-    w.validated = TRUE
-    AND (
-      theme_id IS NULL OR
-      w.theme = theme_id OR
-      w.theme IN (SELECT theme.id FROM theme WHERE parent = theme_id)  -- Inclure les sous-thèmes directs
-    )
-  LIMIT
-    limit_count;
+  WHERE w.validated = FALSE          -- Assurer que le mot est non validé
+  LIMIT limit_count;
 END;
 $$ LANGUAGE plpgsql;
 
--- Appel de la fonction avec une limite de 10 et un thème spécifique
-SELECT * FROM get_word_by_theme(10, 9);
+-- Appel de la fonction
+SELECT * FROM get_unvalidated_word(10);

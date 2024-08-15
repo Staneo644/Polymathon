@@ -2,7 +2,7 @@
 import ThemeButton from "@/components/themeButton";
 import { ThemeRow } from "@/utils/theme/theme";
 import { useState, useEffect } from "react";
-import { completeWord } from "@/utils/word/enrichWord";
+import { completeWord } from "@/utils/word/completeWord";
 import {
   getChildrenThemes,
   getParentThemes,

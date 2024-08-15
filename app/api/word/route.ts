@@ -1,10 +1,7 @@
-import { getLikes } from "@/utils/like/getLikes";
 import { getProfile } from "@/utils/profile/getProfile";
 import { createClient } from "@/utils/supabase/server";
 import { getThemes } from "@/utils/theme/getThemes";
 import { ThemeRow } from "@/utils/theme/theme";
-import { getViews } from "@/utils/view/getViews";
-import { enrichWord } from "@/utils/word/enrichWord";
 import { NextRequest, NextResponse } from "next/server";
 
 async function parseParamsGET(
