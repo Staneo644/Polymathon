@@ -3,6 +3,7 @@
 import form from "@/components/form";
 import { ThemeRow } from "@/utils/theme/theme";
 import { completeWord } from "@/utils/word/completeWord";
+import { NewWord } from "@/utils/word/newWord";
 import { id } from "date-fns/locale";
 import { useEffect, useState } from "react";
 
@@ -94,16 +95,16 @@ export default function validateWords() {
         });
   }, [index, words, themes]);
 
-  const acceptWord = async () => {
+  const acceptWord = async (word: NewWord) => {
     const w = words[index];
     const body = {
       id: w.id,
-      name: w.name,
-      definition: w.definition,
-      type: w.type,
-      etymology: w.etymology,
-      example: w.example,
-      theme: w.theme,
+      name: word.name,
+      definition: word.definition,
+      type: word.type,
+      etymology: word.etymology,
+      example: word.example,
+      theme: word.theme,
     };
     console.log(body);
     // ecraser la proposition de mot
