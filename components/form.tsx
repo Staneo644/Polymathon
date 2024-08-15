@@ -8,12 +8,13 @@ import { completeWord } from "@/utils/word/completeWord";
 import { getIdByName } from "@/utils/theme/convert-theme";
 
 export default function form(
-  name: string,
+  urlName: string,
   word: completeWord | null,
   click: (word: NewWord) => void,
   reject: null | (() => void)
 ): JSX.Element {
-  const [searchWord, setSearchWord] = useState("");
+  const [name, setName] = useState(urlName);
+  console.log(name);
   const [definition, setDefinition] = useState("");
   const [etymology, setetymology] = useState("");
   const [example, setExample] = useState("");
@@ -40,16 +41,19 @@ export default function form(
     }, []);
 
   useEffect(() => {
-    if (word === null) {
-      setSearchWord(name);
-    } else {
-      setSearchWord(word.name);
+    if (word != null) {
       setDefinition(word.definition);
       setetymology(word.etymology);
       setExample(word.example ?? "");
       setType(word.type);
     }
-  }, [name, word]);
+  },[ word])
+
+  useEffect(() => {
+    if (urlName !== "") {
+      setName(urlName);
+    }
+  }, [urlName]);
 
   return (
     <div className="flex flex-col items-center h-full w-100 justify-evenly text-black">
@@ -57,8 +61,8 @@ export default function form(
         type="text"
         placeholder="Mot"
         className="custom-width border rounded p-2"
-        value={searchWord}
-        onChange={(e) => setSearchWord(e.target.value)}
+        value={name}
+        onChange={(e) => setName(e.target.value)}
       />
       <select
         className={`border rounded p-2 custom-width ${
@@ -115,7 +119,8 @@ export default function form(
         className="bg-blue-500 text-white py-2 px-4 rounded custom-width"
         onClick={() => {
           if (
-            searchWord == "" ||
+            name == undefined ||
+            name == "" ||
             etymology == "" ||
             definition === "" ||
             type === "" ||
@@ -126,7 +131,7 @@ export default function form(
             return;
           }
           click({
-            name: searchWord,
+            name: name,
             etymology: etymology,
             definition: definition,
             type: type,

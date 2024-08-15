@@ -3,6 +3,6 @@ export interface NewWord {
     definition: string;
     type: string;
     etymology: string;
-    example: string | null;
+    example: string;
     theme: number | null;
 };

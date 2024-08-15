@@ -15,6 +15,11 @@ export const getIdByName = (themes: ThemeRow[], name: string): number => {
   return theme ? theme.id : 0;
 }
 
+export const getNameById = (themes: ThemeRow[], id: number): string => {
+  const theme = themes.find((e) => e.id === id);
+  return theme ? theme.name : "";
+}
+
 export const getChildrenThemes = (themes: ThemeRow[], parent_id: number): ThemeRow[] => themes.filter((e) => e.parent === parent_id)
 
   export const hasChildren = (themes: ThemeRow[], parent_id: number): boolean => getChildrenThemes(themes, parent_id).length !== 0;

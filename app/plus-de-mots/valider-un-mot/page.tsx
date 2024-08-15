@@ -47,7 +47,7 @@ export default function validateWords() {
   }, []);
 
   useEffect(() => {
-    if (words.length > 0)
+    if (words && words.length > 0)
       fetch(
         `http://localhost:3000/api/word/name?${new URLSearchParams({ name: words[index].name })}`,
         { method: "GET" }
@@ -108,7 +108,7 @@ export default function validateWords() {
       </h1>
       {isWordAdded ? <></> : <p className="absolute mt-10">{compareWord}</p>}
       {form(
-        "",
+        words && words.length > 0 ? words[index].name : "",
         words && words.length > 0 ? words[index] : null,
         acceptWord,
         rejectWord

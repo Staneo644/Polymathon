@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { ThemeRow } from "@/utils/theme/theme";
-import { getParentThemes, getChildrenThemes, hasChildren } from "@/utils/theme/convert-theme";
+import { getParentThemes, getChildrenThemes, hasChildren, getNameById } from "@/utils/theme/convert-theme";
 import {faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
@@ -8,17 +8,24 @@ export const CustomSelect: FC<{setCurrent: (option: number) => void, themes:Them
     const [isOpen, setIsOpen] = useState(false);
     const [selectedParentOptionId, setSelectedParentOptionId] = useState<number>();
     const [parentThemes, setParentThemes] = useState<ThemeRow[]>();
+    const [currentTheme, setCurrentTheme] = useState("");
     
     const toggleOpen = () => setIsOpen(!isOpen);
 
     useEffect(() => {
         setParentThemes(getParentThemes(themes ?? []));
     }, [themes]);
+
+    useEffect(() => {
+        if (current) {
+            setCurrentTheme(getNameById(themes ?? [], current));
+        }
+    }, [current, themes]);
   
     return (
       <div className="custom-select-container">
         <button onClick={toggleOpen} className="bg-gray-100 p-2 rounded-md  w-60 flex justify-between">
-          {current ? current : 'Sélectionner une option'}
+          {currentTheme ? currentTheme : 'Sélectionner une option'}
             <FontAwesomeIcon icon={isOpen ? faChevronUp : faChevronDown} className="mx-2"/>
         </button>
         {isOpen && (
