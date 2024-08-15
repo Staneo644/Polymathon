@@ -34,12 +34,6 @@ const Explanation = (props: Props) => (
     {EtymologyComponent(props.text ?? "")}
   </div>
 );
-/*<FontAwesomeIcon icon={faSlash} className="cursor-pointer -rotate-90 absolute" onClick={handleLeft}/>
-    <FontAwesomeIcon icon={faSlash} className="cursor-pointer -rotate-90 -scale-x-100 absolute -translate-x-100" onClick={handleRigth}
-      style={
-        {transform: "rotate(-90deg) scaleX(-1) translateX(-99%)"} 
-      }
-    />*/
 
 const Arrow = (props: {directionRight: boolean, onClick: () => void}) => 
   
@@ -165,7 +159,7 @@ export const likeWordAPI = (id: number, like: boolean | null) =>
       <h3 className="font-bold italic font-serif text-2xl">
         {props.word.name}
       </h3>
-      <h4 className="text-lg text-gray-600 italic">
+      <h4 className="text-lg text-gray-600 italic select-none">
         {"  ("}
         {props.word.type} 
         {")"}
@@ -223,7 +217,7 @@ export const likeWordAPI = (id: number, like: boolean | null) =>
         </button>
           {" " + numberLikes}
       </div>
-      <p className="italic text-gray-500 font-serif">
+      <p className="italic text-gray-500 font-serif select-none">
         {props.word.views} vues
       </p>
       <div className="relative right-0 mr-2 mb-2 mt-2">
@@ -238,7 +232,6 @@ export const likeWordAPI = (id: number, like: boolean | null) =>
             }
           {" " + numberDislikes}
         </button>
-        {/*'(' + this.word.negative_note + ')'*/}
       </div>
     </div>
     }

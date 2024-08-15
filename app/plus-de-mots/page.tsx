@@ -55,10 +55,10 @@ export default function MoreWorld () {
     </div>
         </div>
         <div className="flex items-center w-full b-4 flex-col"> 
-          <YellowButton onClick={() => {router.push("/more-words/add-word?word=" + inputValue)}} inactive={inputValue.length == 0} className={"font-bold py-2 px-4 rounded-full mt-4"}>
+          <YellowButton onClick={() => {router.push("/plus-de-mots/ajouter-un-mot?word=" + inputValue)}} inactive={inputValue.length == 0} className={"font-bold py-2 px-4 rounded-full mt-4"}>
             Ajouter
             </YellowButton>
-            {isAdmin && <YellowButton onClick={() => {router.push("/more-words/validate-words")}} className={"font-bold py-2 px-4 rounded-full mt-4"}>
+            {isAdmin && <YellowButton onClick={() => {router.push("/plus-de-mots/valider-un-mot")}} className={"font-bold py-2 px-4 rounded-full mt-4"}>
             Valide les mots mon pitit BG d'admin
             </YellowButton>}
 
