@@ -96,7 +96,79 @@ export async function POST(request: NextRequest) {
 
   const { error: errorContribution } = await supabase
     .from("contribution")
-    .insert([{ word: data.id, type: "create" }]);
+    .insert([{ word: data.id, type: "create", user_id: user_id }]);
+
+  if (errorContribution)
+    return NextResponse.json(
+      {
+        error: "error contribution:" + errorContribution.message,
+      },
+      { status: 500 }
+    );
+  return NextResponse.json({ data: data.id }, { status: 201 });
+}
+
+/**
+ * Modifier une proposition de mot
+ * @param prends un json contentant {name: string, definition: string, type: string, etymology: string, example: string, theme: number}
+ * @returns data ou error en succes ou reussite
+ */
+export async function PATCH(request: NextRequest) {
+  const supabase = createClient();
+  const { id, name, definition, type, etymology, example, theme } =
+    await request.json();
+
+  const profile = await getProfile(supabase);
+  if (profile.error || !profile.data)
+    return NextResponse.json({ error: profile.error });
+
+  if (profile.data.admin === false)
+    return NextResponse.json(
+      { error: "You are not an admin" },
+      { status: 403 }
+    );
+
+  if (
+    !id ||
+    !name ||
+    !definition ||
+    !type ||
+    !etymology ||
+    !example ||
+    !theme
+  ) {
+    return NextResponse.json(
+      { error: "Missing required fields" },
+      { status: 400 }
+    );
+  }
+
+  const { data, error } = await supabase
+    .from("word")
+    .update([
+      {
+        name,
+        definition,
+        type,
+        etymology,
+        example,
+        theme,
+      },
+    ])
+    .eq("id", id);
+
+  const user_id = await getUserId(supabase);
+
+  if (error || !data || !user_id) {
+    return NextResponse.json(
+      { error: "db error: " + error?.message },
+      { status: 500 }
+    );
+  }
+
+  const { error: errorContribution } = await supabase
+    .from("contribution")
+    .insert([{ word: id, type: "validate", user_id: user_id }]);
 
   if (errorContribution)
     return NextResponse.json(

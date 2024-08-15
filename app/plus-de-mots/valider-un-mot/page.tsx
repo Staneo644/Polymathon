@@ -3,6 +3,7 @@
 import form from "@/components/form";
 import { ThemeRow } from "@/utils/theme/theme";
 import { completeWord } from "@/utils/word/completeWord";
+import { id } from "date-fns/locale";
 import { useEffect, useState } from "react";
 
 const findTheme = (theme: number, themes: ThemeRow[]) => {
@@ -49,7 +50,7 @@ export default function validateWords() {
   useEffect(() => {
     if (words.length > 0)
       fetch(
-        `http://localhost:3000/api/word/name?${new URLSearchParams({ name: words[index].name })}`,
+        `http://localhost:3000/api/word/id?${new URLSearchParams({ id: words[index].id.toString() })}`,
         { method: "GET" }
       )
         .then((response) => {
@@ -94,7 +95,33 @@ export default function validateWords() {
   }, [index, words, themes]);
 
   const acceptWord = async () => {
-    //createPotentialWord(word, -1);
+    const w = words[index];
+    const body = {
+      id: w.id,
+      name: w.name,
+      definition: w.definition,
+      type: w.type,
+      etymology: w.etymology,
+      example: w.example,
+      theme: w.theme,
+    };
+    console.log(body);
+    // ecraser la proposition de mot
+    fetch(`http://localhost:3000/api/word`, {
+      method: "PATCH",
+      body: JSON.stringify(body),
+    })
+      .then(async (response) => {
+        return await response.json();
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((e) => {
+        console.error("erreur: ", e);
+      });
+
+    // valider le mot
   };
 
   const rejectWord = async () => {
