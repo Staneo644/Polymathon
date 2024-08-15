@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, use, useEffect, useState } from "react";
 import EtymologyComponent from "./etymology";
 import {
   faThumbsUp as faSolidThumbsUp,
@@ -11,6 +11,8 @@ import {
   faThumbsDown as faRegularThumbsDown,
 } from "@fortawesome/free-regular-svg-icons";
 import { completeWord } from "@/utils/word/completeWord";
+import { createClientClient } from "@/utils/supabase/client";
+import { useRouter } from "next/navigation";
 
 type Props = {
   text: string | null;
@@ -83,8 +85,17 @@ const OneCard = forwardRef<
   const [currentLike, setCurrentLike] = useState(props.word.user_like);
   const [numberLikes, setNumberLikes] = useState(props.word.likes);
   const [numberDislikes, setNumberDislikes] = useState(props.word.dislikes);
+  const router = useRouter();
 
   const likeWord = async (like: boolean) => {
+    const supabase = createClientClient();
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    if (!session) {
+      router.push("/login");
+    }
+
     if (like) {
       if (currentLike == true) {
         likeWordAPI(props.word.id, null).then(() => {
