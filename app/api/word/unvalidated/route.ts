@@ -38,6 +38,9 @@ export async function GET(request: NextRequest) {
 
   if (error || !limit) return NextResponse.json({ error });
 
-  const res = await supabase.rpc("get_unvalidated_words", { limit });
+  const res = await supabase.rpc("get_unvalidated_word", {
+    limit_count: limit,
+  });
+  console.log(res);
   return NextResponse.json({ data: res.data });
 }

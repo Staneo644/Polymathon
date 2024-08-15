@@ -1,4 +1,4 @@
-import { forwardRef, use, useEffect, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import EtymologyComponent from "./etymology";
 import {
   faThumbsUp as faSolidThumbsUp,
