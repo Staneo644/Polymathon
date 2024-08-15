@@ -1,14 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { completeWord } from "@/utils/word/completeWord";
+import { NewWord } from "@/utils/word/newWord";
 import { ThemeRow } from "@/utils/theme/theme";
 import { CustomSelect } from "./customSelect";
+import { completeWord } from "@/utils/word/completeWord";
+import { getIdByName } from "@/utils/theme/convert-theme";
 
 export default function form(
   name: string,
   word: completeWord | null,
-  click: (word: completeWord) => void,
+  click: (word: NewWord) => void,
   reject: null | (() => void)
 ): JSX.Element {
   const [searchWord, setSearchWord] = useState("");
@@ -16,8 +18,26 @@ export default function form(
   const [etymology, setetymology] = useState("");
   const [example, setExample] = useState("");
   const [type, setType] = useState("");
-  const [theme, setTheme] = useState("");
+  const [theme, setTheme] = useState<number | null>();
   const [completeField, setCompleteField] = useState(false);
+  const [themes, setThemes] = useState<ThemeRow[]>();
+
+  useEffect(() => {
+      fetch('http://localhost:3000/api/theme', { method: 'GET' })
+        .then((response) => {
+          if (response.ok) {
+            response.json().then((data) => {
+              setThemes(data.data);
+              if (word !== null && word.theme !== null) {
+                setTheme(getIdByName(data.data, word.theme));
+              }
+            });
+          }
+        })
+        .catch((e) => {
+          console.error('erreur: ', e);
+        });
+    }, []);
 
   useEffect(() => {
     if (word === null) {
@@ -28,7 +48,6 @@ export default function form(
       setetymology(word.etymology);
       setExample(word.example ?? "");
       setType(word.type);
-      setTheme(word.theme ?? "");
     }
   }, [name, word]);
 
@@ -65,8 +84,9 @@ export default function form(
         <option value="autre">Autre</option>
       </select>
       <CustomSelect
-        setCurrent={(current: string) => setTheme(current)}
-        current={theme}
+        setCurrent={(current: number) => setTheme(current)}
+        themes={themes ?? []}
+        current={theme ?? 0}
       />
       <textarea
         placeholder="Définition"
@@ -111,13 +131,7 @@ export default function form(
             definition: definition,
             type: type,
             example: example,
-            theme: "",
-            id: 0,
-            last_day_word: "",
-            likes: 0,
-            dislikes: 0,
-            views: 0,
-            user_like: null,
+            theme: theme,
           });
         }}
       >

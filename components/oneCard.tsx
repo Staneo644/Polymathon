@@ -3,9 +3,10 @@ import EtymologyComponent from "./etymology";
 import {
   faThumbsUp as faSolidThumbsUp,
   faThumbsDown as faSolidThumbsDown,
-  faSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import BranchLeft from "../public/images/branch-left.svg"
+import BranchRight from "../public/images/branch-right.svg"
 import {
   faThumbsUp as faRegularThumbsUp,
   faThumbsDown as faRegularThumbsDown,
@@ -40,24 +41,13 @@ const Explanation = (props: Props) => (
 const Arrow = (props: { directionRight: boolean; onClick: () => void }) => (
   <button
     onClick={props.onClick}
-    className={`absolute ${props.directionRight ? "right-2 inset-1/2 transform -translate-x-1/2" : "left-0 -translate-x-4 inset-1/2 transform -translate-x-1/2"}`}
-    style={{
+    className={`absolute top-[50%] bottom-[50%] transform -translate-y-4 ${props.directionRight ? "right-0 translate-x-8" : "left-0 -translate-x-10"}`}
+    /*style={{
       transform: `${props.directionRight ? "translateX(4.5rem)" : "translateX(-6.2rem) translateY(-1rem)"} `,
-    }}
+    }}*/
   >
-    <FontAwesomeIcon
-      icon={faSlash}
-      style={{
-        transform: `rotate(-90deg) ${props.directionRight ? "" : "scaleX(-1) translateX(82%) translateY(120%)"} `,
-      }}
-    />
-    <FontAwesomeIcon
-      icon={faSlash}
-      className="absolute"
-      style={{
-        transform: `rotate(-90deg) ${props.directionRight ? "scaleX(-1) translateX(-82%) translateY(-120%)" : ""} `,
-      }}
-    />
+    {props.directionRight ?  <BranchRight className="w-14 h-14" /> : <BranchLeft className="w-14 h-14" />}
+
   </button>
 );
 
