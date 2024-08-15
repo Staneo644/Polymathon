@@ -10,6 +10,11 @@ export const getParentThemes = (themes: ThemeRow[], addThemeAll?:boolean): Theme
   return res;
 };
 
+export const getIdByName = (themes: ThemeRow[], name: string): number => {
+  const theme = themes.find((e) => e.name === name);
+  return theme ? theme.id : 0;
+}
+
 export const getChildrenThemes = (themes: ThemeRow[], parent_id: number): ThemeRow[] => themes.filter((e) => e.parent === parent_id)
 
   export const hasChildren = (themes: ThemeRow[], parent_id: number): boolean => getChildrenThemes(themes, parent_id).length !== 0;

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { completeWord } from "@/utils/word/completeWord";
 import { WordContainer } from "@/components/wordContainer";
-import { ParamsWord } from "@/app/search/page";
+import { ParamsWord } from "@/app/rechercher/page";
 
 export function PageWordContainer(apiUrl: string) {
   const [loadingWords, setLoadingWords] = useState(true);
