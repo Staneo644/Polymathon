@@ -48,7 +48,7 @@ export default function Search() {
       const theme = getNomTheme(selectedTheme, sousSelectedTheme);
       await fetch(
         theme
-          ? `api/word?${new URLSearchParams(ParamsWord).append("theme", theme)}`
+          ? `api/word?${new URLSearchParams({limit: wordLimit.toString(),"theme": theme})}`
           : `api/word?${ParamsWord}`
       )
         .then((res) => res.json())
@@ -107,10 +107,14 @@ export default function Search() {
             />
           </div>
         )}
-      {loadingWords && <div>Chargement en cours...</div>}
-      {!loadingWords && listWord && listWord.length === 0 && (
-        <div>Aucun mot à afficher</div>
-      )}
+        {listWord && listWord.length == 0 && (
+          <>
+          {loadingWords && <div>Chargement en cours...</div>}
+          {!loadingWords && (
+            <div>Aucun mot à afficher</div>
+          )}
+          </>
+        )}
       {CardContainer(listWord, setListWord, fetchData)}
     </>
   );

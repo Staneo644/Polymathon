@@ -1,6 +1,6 @@
 import { completeWord } from "@/utils/word/completeWord";
 import { useState, useEffect, useRef } from "react";
-import { wordLimit, wordNewCall } from "@/app/search/page";
+import { wordLimit, wordNewCall } from "@/app/rechercher/page";
 import OneCard from "./oneCard";
 import { useSearchParams } from "next/navigation";
 

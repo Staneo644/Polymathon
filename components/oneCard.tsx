@@ -34,12 +34,6 @@ const Explanation = (props: Props) => (
     {EtymologyComponent(props.text ?? "")}
   </div>
 );
-/*<FontAwesomeIcon icon={faSlash} className="cursor-pointer -rotate-90 absolute" onClick={handleLeft}/>
-    <FontAwesomeIcon icon={faSlash} className="cursor-pointer -rotate-90 -scale-x-100 absolute -translate-x-100" onClick={handleRigth}
-      style={
-        {transform: "rotate(-90deg) scaleX(-1) translateX(-99%)"} 
-      }
-    />*/
 
 const Arrow = (props: { directionRight: boolean; onClick: () => void }) => (
   <button
@@ -49,6 +43,7 @@ const Arrow = (props: { directionRight: boolean; onClick: () => void }) => (
       transform: `${props.directionRight ? "translateX(4.5rem)" : "translateX(-6.2rem) translateY(-1rem)"} `,
     }}
   >
+<<<<<<< HEAD
     <FontAwesomeIcon
       icon={faSlash}
       style={{
@@ -64,12 +59,90 @@ const Arrow = (props: { directionRight: boolean; onClick: () => void }) => (
     />
   </button>
 );
+=======
+    <div className="mt-2 ml-2 text-xl italic font-serif">
+    </div>
+    <div className="flex items-center justify-center whitespace-pre">
+      <h3 className="font-bold italic font-serif text-2xl">
+        {props.word.name}
+      </h3>
+      <h4 className="text-lg text-gray-600 italic select-none">
+        {"  ("}
+        {props.word.type} 
+        {")"}
+      </h4>
+    </div>
+    <button className={"mb-2 ml-2 text-xl italic font-serif text-left" + ((visibleText) ? " cursor-default" : "")} onClick={() => (setVisibleText(true))}>
+    <div className={`duration-300 transition-transform ${ (visibleText ? " " : " invisible")}`}
+      >
+      <Explanation
+        text={listItems[0]} 
+        theme={props.word.theme} 
+        isDefinition={currentIndex == 1}
+        index={currentIndex == 0 ? 2 : currentIndex - 1}
+        isVisible={currentIndex == 2 || oldIndex == 2}
+      />
+      <Explanation
+        text={listItems[1]} 
+        theme={props.word.theme} 
+        isDefinition={currentIndex == 1}
+        index={currentIndex}
+        isVisible={currentIndex == 1 || oldIndex == 1}
+      />
+      <Explanation
+        text={listItems[2]} 
+        theme={props.word.theme} 
+        isDefinition={currentIndex == 1}
+        index={currentIndex == 2 ? 0 : currentIndex + 1}
+        isVisible={currentIndex == 0 || oldIndex == 0}
+        />
+    </div>
+      <div className='relative'>
+  
+  <div className="invisible">
+>>>>>>> ea28fc05e0a085187325adbe5a67d8257972c5cc
 
 export const likeWordAPI = (id: number, like: boolean | null) =>
   fetch(
     `http://localhost:3000/api/like?${new URLSearchParams({ id: id.toString(), like: like ? "true" : "false" })}`,
     {
+<<<<<<< HEAD
       method: "POST",
+=======
+      props.hideLikesDislikes ? null :
+    <div className="mb-2 ml-2 flex justify-between items-center">
+      <div className="relative left-0 ml-2 mb-2 mt-2">
+        <button
+        className="p-1"
+        onClick={() => {
+          likeWord(true);
+        }}
+        >
+            {currentLike == true ? 
+              <FontAwesomeIcon className="text-green-500 h-5" icon={faSolidThumbsUp}/> :
+              <FontAwesomeIcon className="text-green-500" icon={faRegularThumbsUp}/>
+            }
+        </button>
+          {" " + numberLikes}
+      </div>
+      <p className="italic text-gray-500 font-serif select-none">
+        {props.word.views} vues
+      </p>
+      <div className="relative right-0 mr-2 mb-2 mt-2">
+        <button
+          onClick={() => {
+            likeWord(false);
+          }}
+          >
+            {currentLike == false ? 
+              <FontAwesomeIcon className="text-red-500 h-5" icon={faSolidThumbsDown}/> :
+              <FontAwesomeIcon className="text-red-500" icon={faRegularThumbsDown}/>
+            }
+          {" " + numberDislikes}
+        </button>
+      </div>
+    </div>
+>>>>>>> ea28fc05e0a085187325adbe5a67d8257972c5cc
     }
   );
 
