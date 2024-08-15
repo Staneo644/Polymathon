@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { completeWord } from "@/utils/word/enrichWord";
 import {WordContainer} from "@/components/wordContainer";
-import { wordLimit } from "@/app/search/page";
+import { ParamsWord} from "@/app/search/page";
 
-const ParamsWord = new URLSearchParams({ limit: wordLimit.toString() });
 
 export function PageWordContainer(apiUrl: string) {
   const [loadingWords, setLoadingWords] = useState(true);

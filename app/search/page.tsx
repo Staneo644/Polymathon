@@ -48,7 +48,7 @@ export default function Search() {
       const theme = getNomTheme(selectedTheme, sousSelectedTheme);
       await fetch(
         theme
-          ? `api/word?${ParamsWord.append("theme", theme)}`
+          ? `api/word?${new URLSearchParams(ParamsWord).append("theme", theme)}`
           : `api/word?${ParamsWord}`
       )
         .then((res) => res.json())

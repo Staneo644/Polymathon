@@ -28,7 +28,7 @@ const CardContainer = (
   };
 
   const moveDown = async () => {
-    fetch(`http://localhost:3000/api/view?${new URLSearchParams({id: list[startIndex].id.toString()})}` + list[startIndex].id, {
+    fetch(`http://localhost:3000/api/view?${new URLSearchParams({id: list[startIndex].id.toString()})}`, {
       method: "POST",
     }).catch((e: any) => {
       console.error("erreur: ", e);
