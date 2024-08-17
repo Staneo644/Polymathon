@@ -13,6 +13,7 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 import { completeWord } from "@/utils/word/completeWord";
 import { createClientClient } from "@/utils/supabase/client";
+import backgroundImage from "../public/images/background-card-2.png";
 import { useRouter } from "next/navigation";
 
 type Props = {
@@ -41,12 +42,12 @@ const Explanation = (props: Props) => (
 const Arrow = (props: { directionRight: boolean; onClick: () => void }) => (
   <button
     onClick={props.onClick}
-    className={`absolute top-[50%] bottom-[50%] transform -translate-y-4 ${props.directionRight ? "right-0 translate-x-8" : "left-0 -translate-x-10"}`}
+    className={`absolute top-[50%] bottom-[50%] transform -translate-y-10 ${props.directionRight ? "right-0 translate-x-16" : "left-0 -translate-x-10"}`}
     /*style={{
       transform: `${props.directionRight ? "translateX(4.5rem)" : "translateX(-6.2rem) translateY(-1rem)"} `,
     }}*/
   >
-    {props.directionRight ?  <BranchRight className="w-14 h-14" /> : <BranchLeft className="w-14 h-14" />}
+    {props.directionRight ?  <BranchRight className="w-32 h-32" /> : <BranchLeft className="w-14 h-14" />}
 
   </button>
 );
@@ -72,7 +73,7 @@ const OneCard = forwardRef<
   const [oldIndex, setOldIndex] = useState(1);
   const [currentIndex, setCurrentIndex] = useState(1);
   const [visibleText, setVisibleText] = useState(!props.hideDefinition);
-  const [currentLike, setCurrentLike] = useState(props.word.user_like);
+  const [currentLike, setCurrentLike] = useState(props.word.user_like_status);
   const [numberLikes, setNumberLikes] = useState(props.word.likes);
   const [numberDislikes, setNumberDislikes] = useState(props.word.dislikes);
   const router = useRouter();
@@ -157,10 +158,9 @@ const OneCard = forwardRef<
   return (
     <div
       ref={ref}
-      className="bg-white shadow-md rounded-lg p-4 mb-[45px] last:mb-0 text-gray-800"
+      className="shadow-md rounded-lg p-4 mb-[45px] last:mb-0 text-gray-800"
       style={{
-        backgroundImage:
-          "url(https://s2.qwant.com/thumbr/474x323/7/5/15e7a9bcd784af960fb05e85addd943f5f08a5259bb5803b58a1b3f39473cc/th.jpg?u=https%3A%2F%2Ftse.mm.bing.net%2Fth%3Fid%3DOIP.jytUH6XTOQ7pXAgURy6LYQHaFD%26pid%3DApi&q=0&b=1&p=0&a=0)",
+        backgroundImage: `url(${backgroundImage.src})`,
         borderRadius: "20px",
         backgroundSize: "cover",
       }}

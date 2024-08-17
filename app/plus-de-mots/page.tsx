@@ -1,13 +1,21 @@
 "use client";
 
+import backgroundImage from "@/public/images/background-card-2.png";
 import { YellowButton } from "@/components/button";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+
+interface WordPreview {
+  id: number;
+  name: string;
+  distance: number;
+}
 
 export default function MoreWorld () {
     const [inputValue, setInputValue] = useState('');
     const [debouncedValue, setDebouncedValue] = useState(inputValue);
     const [isAdmin, setIsAdmin] = useState(false);
+    const [listSearchedWord, setListSearchedWord] = useState<WordPreview[]>([]);
     const router = useRouter();
   
     useEffect(() => {
@@ -22,7 +30,16 @@ export default function MoreWorld () {
   
     useEffect(() => {
       if (debouncedValue) {
-        //TO COMPLETE
+        fetch("http://localhost:3000/api/word/search?text=" + debouncedValue, {method: 'GET'}).then((response) => {
+          if (response.ok) {
+            response.json().then((data) => {
+              setListSearchedWord(data.data);
+            });
+          }
+        }
+        ).catch((e) => {
+          console.error("erreur: ", e);
+        });
       }
     }, [debouncedValue]);
 
@@ -62,6 +79,26 @@ export default function MoreWorld () {
             Valide les mots mon pitit BG d'admin
             </YellowButton>}
 
+        </div>
+        <div className="flex items-center w-full h-1/2 flex-col">
+          <p className="text-[var(--yellow)] mt-10 font-bold">Liste des mots</p>
+          <div className="flex flex-col items-center w-full align-center items-center overflow-scroll">
+            {listSearchedWord.map((word) => {
+              return (                  
+                    <button key={word.id} onClick={() => {router.push("/plus-de-mots/modifier-un-mot?id=" + word.id)}} className={`text-gray-900 font-bold px-4 rounded-full flex items-center w-1/2 my-2 justify-between`}
+                      style={{
+                        backgroundImage: `url(${backgroundImage.src})`,
+                        borderRadius: "20px",
+                        backgroundSize: "cover",
+                      }}
+                      >
+                      {word.name} <div className="h-12 w-1 bg-black mx-4 opacity-50"/> {" "}
+                      modifier
+                    </button>
+                  
+              );
+            })}
+          </div>
         </div>
         </>
     )

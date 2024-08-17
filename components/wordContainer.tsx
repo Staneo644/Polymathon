@@ -16,7 +16,7 @@ import {
  */
 
 const Word = (props: { word: completeWord }) => {
-  const [currentLike, setCurrentLike] = useState(props.word.user_like);
+  const [currentLike, setCurrentLike] = useState(props.word.user_like_status);
   const [numberLikes, setNumberLikes] = useState(props.word.likes);
   const [numberDislikes, setNumberDislikes] = useState(props.word.dislikes);
 

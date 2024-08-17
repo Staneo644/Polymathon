@@ -81,7 +81,7 @@ const CardContainer = (
     return () => {
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [list.length]);
+  }, [list]);
 
   useEffect(() => {
     if (startIndex > 0) {

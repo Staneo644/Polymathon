@@ -19,7 +19,7 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  if (!preferences.hide_definition || !preferences.hide_likes)
+  if (preferences.hide_definition === undefined || preferences.hide_likes === undefined)
     return NextResponse.json(
       { error: "Missing required fields either hide_definition or hide_likes" },
       { status: 400 }

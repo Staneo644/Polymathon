@@ -17,8 +17,8 @@ export const CustomSelect: FC<{setCurrent: (option: number) => void, themes:Them
     }, [themes]);
 
     useEffect(() => {
-        if (current) {
-            setCurrentTheme(getNameById(themes ?? [], current));
+        if (current && themes && themes.length > 0) {
+          setCurrentTheme(getNameById(themes, current));
         }
     }, [current, themes]);
   

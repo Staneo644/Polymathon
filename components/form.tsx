@@ -5,7 +5,6 @@ import { NewWord } from "@/utils/word/newWord";
 import { ThemeRow } from "@/utils/theme/theme";
 import { CustomSelect } from "./customSelect";
 import { completeWord } from "@/utils/word/completeWord";
-import { getIdByName } from "@/utils/theme/convert-theme";
 
 export default function form(
   urlName: string,
@@ -19,7 +18,7 @@ export default function form(
   const [etymology, setetymology] = useState("");
   const [example, setExample] = useState("");
   const [type, setType] = useState("");
-  const [theme, setTheme] = useState<number | null>();
+  const [theme, setTheme] = useState<number>();
   const [completeField, setCompleteField] = useState(false);
   const [themes, setThemes] = useState<ThemeRow[]>();
 
@@ -29,9 +28,6 @@ export default function form(
           if (response.ok) {
             response.json().then((data) => {
               setThemes(data.data);
-              if (word !== null && word.theme !== null) {
-                setTheme(getIdByName(data.data, word.theme));
-              }
             });
           }
         })
@@ -46,6 +42,7 @@ export default function form(
       setetymology(word.etymology);
       setExample(word.example ?? "");
       setType(word.type);
+      setTheme(word.theme);
     }
   },[ word])
 
@@ -90,7 +87,7 @@ export default function form(
       <CustomSelect
         setCurrent={(current: number) => setTheme(current)}
         themes={themes ?? []}
-        current={theme ?? 0}
+        current={theme}
       />
       <textarea
         placeholder="Définition"

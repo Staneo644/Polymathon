@@ -12,7 +12,7 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/word/day");
+        const response = await fetch("http://localhost:3000/api/word/day?limit=3");
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -30,7 +30,7 @@ export default function Home() {
   return (
     <div className="overflow-hidden">
       {isLoading && <div>Chargement en cours...</div>}
-      {!isLoading && listWord.length === 0 && <div>Aucun mot à afficher</div>}
+      {!isLoading && listWord && listWord.length === 0 && <div>Aucun mot à afficher</div>}
 
       {CardContainer(listWord, setListWord, () => {})}
     </div>

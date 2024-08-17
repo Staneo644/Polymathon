@@ -3,6 +3,24 @@ import { logout } from "@/utils/supabase/logout";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
+export function Checkbox(status: boolean, setStatus: (status: boolean) => void) {
+  return (
+    
+     <button className={`w-6 h-6 ${status ? "bg-blue-400" : "bg-gray-200"} rounded-md flex items-center justify-center cursor-pointer shadow-sm hover:bg-gray-300 peer-checked:bg-blue-600 peer-checked:border-transparent transition-all duration-300`}
+      onClick={() => setStatus(!status)}
+     >
+      <svg
+        className={`w-8 h-8 text-wgite peer-checked:block ${status ? "block" : "hidden"}`}
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+      </svg>
+</button>
+  );
+}
 
 
 export default function Profile() {
@@ -27,17 +45,57 @@ export default function Profile() {
         ).catch((e) => {
           console.error("erreur: ", e);
         });
+
+        fetch("http://localhost:3000/api/profile", {method: 'GET'}).then((response) => {
+          if (response.ok) {
+            response.json().then((data) => {
+              setStatusHideDefinition(data.data.hide_definition);
+              setStatusHideLikesDislikes(data.data.hide_likes);
+            });
+          }
+        }
+        ).catch((e) => {
+          console.error("erreur: ", e);
+        });
       }, []);
 
 
     const hideDefinition = (e: any) => {
-        localStorage.setItem('hideDefinition', e.target.checked);
-        setStatusHideDefinition(e.target.checked);
+        fetch("http://localhost:3000/api/profile", {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({hide_definition: e.target.checked, hide_likes: statusHideLikesDislikes})
+        }).then((response) => {
+          if (response.ok) {
+            response.json().then((data) => {
+              setStatusHideDefinition(e.target.checked);
+            });
+          }
+        }
+        ).catch((e) => {
+          console.error("erreur: ", e);
+        });
     }
 
-    const hideLikesDislikes = (e: any) => {
-        localStorage.setItem('hideLikesDislikes', e.target.checked);
-        setStatusHideLikesDislikes(e.target.checked);
+    const hideLikesDislikes = async (e: any) => {
+        fetch("http://localhost:3000/api/profile", {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({hide_likes: e.target.checked, hide_definition: statusHideDefinition})
+        }).then((response) => {
+          if (response.ok) {
+            response.json().then((data) => {
+              setStatusHideLikesDislikes(e.target.checked);
+            });
+          }
+        }
+        ).catch((e) => {
+          console.error("erreur: ", e);
+        });
     }
 
     const SeeButton = ({ newURL, content, className }: {newURL: string; content?:string; className?:string}) => (
@@ -92,6 +150,8 @@ export default function Profile() {
         <SeeButton newURL="/profile/mots-desapprouves" />
         </div>
         <div className="flex justify-between mt-2">
+
+        {Checkbox(statusHideLikesDislikes, setStatusHideLikesDislikes)}
 
         <SeeButton newURL="/statistiques-generales/mots-populaires" content="Les plus populaires" className="mr-2"/>
         <SeeButton newURL="/statistiques-generales/mots-impopulaires" content="Les moins populaires" className="ml-4"/>

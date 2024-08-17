@@ -2,15 +2,15 @@
 import form from "@/components/form";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { WordRow } from "@/utils/word/word";
 import { completeWord } from "@/utils/word/completeWord";
 import { NewWord } from "@/utils/word/newWord";
+import { WordRow } from "@/utils/word/word";
 
 export default function MoreWorlds() {
   const searchParam = useSearchParams();
-  const wordName = [searchParam?.get("word") ?? ""][0];
-  const [word, setWord] = useState<completeWord | null>(null);
-  const param = new URLSearchParams({ word: wordName });
+  const wordId = [searchParam?.get("id") ?? ""][0];
+  const [word, setWord] = useState<WordRow | null>(null);
+  const param = new URLSearchParams({ id: wordId });
 
   const addWord = async (word: NewWord) => {
     await fetch("http://localhost:3000/api/word", {
@@ -35,20 +35,20 @@ export default function MoreWorlds() {
   };
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/word?${param}`, {
+    fetch(`http://localhost:3000/api/word/id?${param}`, {
       method: "GET",
     })
       .then((response) => {
         if (response.ok) {
           response.json().then((data) => {
-            setWord(data);
+            setWord(data.data.data[0]);
           });
         }
       })
       .catch((e) => {
         console.error("erreur: ", e);
       });
-  }, [wordName]);
+  }, [wordId]);
 
-  return form(wordName, word, addWord, null);
+  return form(word?.name ?? "", word, addWord, null);
 }

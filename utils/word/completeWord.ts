@@ -9,6 +9,6 @@ export interface completeWord {
   last_day_word: string;
   likes: number;
   dislikes: number;
-  user_like: boolean | null;
+  user_like_status: boolean | null;
   views: number;
 }
