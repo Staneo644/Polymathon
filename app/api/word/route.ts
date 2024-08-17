@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
 
   const res = await supabase.rpc("get_word_by_theme", {
     limit_count: limit,
-    theme_id: theme,
+    theme_id_searched: theme,
   });
   if (res.error || !res.data)
     return NextResponse.json({

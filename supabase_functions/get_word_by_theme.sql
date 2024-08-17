@@ -2,7 +2,7 @@
 DROP FUNCTION IF EXISTS get_word_by_theme(INTEGER, INTEGER);
 
 -- Créer ou remplacer la fonction
-CREATE OR REPLACE FUNCTION get_word_by_theme(limit_count INTEGER, theme_id INTEGER)
+CREATE OR REPLACE FUNCTION get_word_by_theme(limit_count INTEGER, theme_id_searched INTEGER)
 RETURNS TABLE (
   id BIGINT,
   name VARCHAR,
@@ -10,7 +10,8 @@ RETURNS TABLE (
   type VARCHAR,
   etymology TEXT,
   example TEXT,
-  theme TEXT,
+  theme_id BIGINT,
+  theme_name TEXT,
   last_day_word DATE,
   likes BIGINT,
   dislikes BIGINT,
@@ -26,7 +27,8 @@ BEGIN
     w.type,
     w.etymology,
     w.example,
-    (SELECT theme.name FROM theme WHERE theme.id = w.theme) AS theme,
+    w.theme as theme_id,
+    (SELECT theme.name FROM theme WHERE theme.id = w.theme) AS theme_name,
     w.last_day_word,
     (SELECT COUNT(*)
      FROM "like" 
@@ -49,9 +51,9 @@ BEGIN
   WHERE
     w.validated = TRUE
     AND (
-      theme_id IS NULL OR
-      w.theme = theme_id OR
-      w.theme IN (SELECT theme.id FROM theme WHERE parent = theme_id)  -- Inclure les sous-thèmes directs
+      theme_id_searched IS NULL OR
+      w.theme = theme_id_searched OR
+      w.theme IN (SELECT theme.id FROM theme WHERE parent = theme_id_searched)  -- Inclure les sous-thèmes directs
     )
   LIMIT
     limit_count;
