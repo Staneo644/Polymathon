@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 async function addWordOfTheDay(supabase: SupabaseClient, limit: number) {
   const select = await supabase.rpc("get_next_word_of_the_day", {
-    limit_number: limit,
+    limit_count: limit,
   });
 
   if (!select.data || select.error) return { error: select.error };
@@ -30,14 +30,15 @@ export async function GET(request: NextRequest) {
   const limit = Number(process.env.WORD_OF_THE_DAY_PER_DAY) || 1;
 
   const { data, error } = await supabase.rpc("get_word_of_the_day");
-  if (error) return NextResponse.json({ error: error });
+  if (error) return NextResponse.json({ error: error }, { status: 500 });
 
   if (data.length < limit) {
     const add = await addWordOfTheDay(supabase, limit);
-    if (add.error) return NextResponse.json({ error: add.error });
+    if (add.error)
+      return NextResponse.json({ error: add.error }, { status: 500 });
 
     const { data, error } = await supabase.rpc("get_word_of_the_day");
-    if (error) return NextResponse.json({ error: error });
+    if (error) return NextResponse.json({ error: error }, { status: 500 });
     return NextResponse.json({ data: data });
   }
 
