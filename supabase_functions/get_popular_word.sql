@@ -10,7 +10,8 @@ RETURNS TABLE (
   type VARCHAR,
   etymology TEXT,
   example TEXT,
-  theme TEXT,
+  theme_id BIGINT,
+  theme_name TEXT,
   last_day_word DATE,
   likes BIGINT,
   dislikes BIGINT,
@@ -28,7 +29,8 @@ BEGIN
       w.type,
       w.etymology,
       w.example,
-      (SELECT theme.name FROM theme WHERE theme.id = w.theme) AS theme,
+      w.theme as theme_id,
+      (SELECT theme.name FROM theme WHERE theme.id = w.theme) AS theme_name,
       w.last_day_word,
       (SELECT COUNT(*)
        FROM "like" 

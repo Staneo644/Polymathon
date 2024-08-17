@@ -10,7 +10,8 @@ RETURNS TABLE (
   type VARCHAR,
   etymology TEXT,
   example TEXT,
-  theme TEXT,
+  theme_id BIGINT,
+  theme_name TEXT,
   last_day_word DATE,
   likes BIGINT,
   dislikes BIGINT,
@@ -26,7 +27,8 @@ BEGIN
     w.type,
     w.etymology,
     w.example,
-    (SELECT theme.name FROM theme WHERE theme.id = w.theme) AS theme,
+    w.theme as theme_id,
+    (SELECT theme.name FROM theme WHERE theme.id = w.theme) AS theme_name,
     w.last_day_word,
     (SELECT COUNT(*)
      FROM "like" 
@@ -47,7 +49,7 @@ BEGIN
   FROM
     word w
   WHERE
-    w.id IN (SELECT * FROM like WHERE like.like = state)
+    w.id IN (SELECT l.word FROM "like" l WHERE l."like" = state AND l.user_id = auth.uid());
 END;
 $$ LANGUAGE plpgsql;
 
