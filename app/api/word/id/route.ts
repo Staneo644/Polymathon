@@ -1,7 +1,5 @@
-import { getProfile } from "@/utils/profile/getProfile";
 import { createClient } from "@/utils/supabase/server";
-import { getThemes } from "@/utils/theme/getThemes";
-import { getWordById } from "@/utils/word/getWordByName";
+import { getWordById } from "@/utils/word/getWordById";
 import { NextRequest, NextResponse } from "next/server";
 
 async function parseParamsGET(

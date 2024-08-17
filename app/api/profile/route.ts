@@ -1,4 +1,4 @@
-import { getProfile } from "@/utils/profile/getProfile";
+import { getProfile, getUserId } from "@/utils/profile/getProfile";
 import { createClient } from "@/utils/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -19,13 +19,25 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  if (preferences.hide_definition === undefined || preferences.hide_likes === undefined)
+  if (
+    preferences.hide_definition === undefined ||
+    preferences.hide_likes === undefined
+  )
     return NextResponse.json(
       { error: "Missing required fields either hide_definition or hide_likes" },
       { status: 400 }
     );
 
-  const updateReq = await supabase.from("profiles").update(preferences);
+  const uid = await getUserId(supabase);
+  if (!uid)
+    return NextResponse.json({ error: "User not found" }, { status: 404 });
+
+  console.log(preferences);
+  const updateReq = await supabase
+    .from("profile")
+    .update(preferences)
+    .eq("user_id", uid);
+  console.log(updateReq);
   if (updateReq.error)
     return NextResponse.json(
       { error: "db error: " + updateReq.error.message },
