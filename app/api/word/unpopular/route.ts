@@ -2,7 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
 async function parseParamsGET(
-  request: NextRequest
+  request: NextRequest,
 ): Promise<{ limit?: number; error?: string }> {
   const searchParams = request.nextUrl.searchParams;
   const limit = searchParams.get("limit");

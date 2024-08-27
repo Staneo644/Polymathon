@@ -3,5 +3,5 @@
 import { PageWordContainer } from "@/components/pageWordContainer";
 
 export default function Page() {
-  return ( PageWordContainer("/api/word/popular"));
+  return PageWordContainer("/api/word/popular");
 }

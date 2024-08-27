@@ -15,7 +15,7 @@ async function destroyLike(supabase: SupabaseClient, word_id: number) {
 async function hasToChange(
   supabase: SupabaseClient,
   word_id: number,
-  like: boolean | null
+  like: boolean | null,
 ) {
   const { data, error } = await supabase
     .from("like")
@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
   if (!(await hasToChange(supabase, id, like)))
     return NextResponse.json(
       { error: "Already in this state: " + like },
-      { status: 400 }
+      { status: 400 },
     );
 
   if (await destroyLike(supabase, id))

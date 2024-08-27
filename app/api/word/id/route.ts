@@ -3,7 +3,7 @@ import { getWordById } from "@/utils/word/getWordById";
 import { NextRequest, NextResponse } from "next/server";
 
 async function parseParamsGET(
-  request: NextRequest
+  request: NextRequest,
 ): Promise<{ id?: string; error?: string }> {
   const searchParams = request.nextUrl.searchParams;
   const id = searchParams.get("id");

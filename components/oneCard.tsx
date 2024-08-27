@@ -5,8 +5,8 @@ import {
   faThumbsDown as faSolidThumbsDown,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import BranchLeft from "../public/images/branch-left.svg"
-import BranchRight from "../public/images/branch-right.svg"
+import BranchLeft from "../public/images/branch-left.svg";
+import BranchRight from "../public/images/branch-right.svg";
 import {
   faThumbsUp as faRegularThumbsUp,
   faThumbsDown as faRegularThumbsDown,
@@ -47,8 +47,11 @@ const Arrow = (props: { directionRight: boolean; onClick: () => void }) => (
       transform: `${props.directionRight ? "translateX(4.5rem)" : "translateX(-6.2rem) translateY(-1rem)"} `,
     }}*/
   >
-    {props.directionRight ?  <BranchRight className="w-32 h-32" /> : <BranchLeft className="w-14 h-14" />}
-
+    {props.directionRight ? (
+      <BranchRight className="w-32 h-32" />
+    ) : (
+      <BranchLeft className="w-14 h-14" />
+    )}
   </button>
 );
 
@@ -57,7 +60,7 @@ export const likeWordAPI = (id: number, like: boolean | null) =>
     `http://localhost:3000/api/like?${new URLSearchParams({ id: id.toString(), like: like ? "true" : "false" })}`,
     {
       method: "POST",
-    }
+    },
   );
 
 const OneCard = forwardRef<

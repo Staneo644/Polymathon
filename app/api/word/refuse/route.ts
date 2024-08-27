@@ -14,7 +14,7 @@ export async function PATCH(request: NextRequest) {
   if (!id) {
     return NextResponse.json(
       { error: "Missing required fields" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -29,12 +29,12 @@ export async function PATCH(request: NextRequest) {
   if (error) {
     return NextResponse.json(
       { error: "db error: " + error.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 
   return NextResponse.json(
     { data: "successfully refused: " + id },
-    { status: 200 }
+    { status: 200 },
   );
 }

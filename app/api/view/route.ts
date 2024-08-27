@@ -25,13 +25,13 @@ function isToday(timestamp: number): boolean {
   const startOfToday = new Date(
     today.getFullYear(),
     today.getMonth(),
-    today.getDate()
+    today.getDate(),
   );
 
   const startOfDate = new Date(
     date.getFullYear(),
     date.getMonth(),
-    date.getDate()
+    date.getDate(),
   );
 
   return startOfToday.getTime() === startOfDate.getTime();

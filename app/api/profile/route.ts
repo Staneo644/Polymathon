@@ -25,7 +25,7 @@ export async function PATCH(request: NextRequest) {
   )
     return NextResponse.json(
       { error: "Missing required fields either hide_definition or hide_likes" },
-      { status: 400 }
+      { status: 400 },
     );
 
   const uid = await getUserId(supabase);
@@ -41,7 +41,7 @@ export async function PATCH(request: NextRequest) {
   if (updateReq.error)
     return NextResponse.json(
       { error: "db error: " + updateReq.error.message },
-      { status: 500 }
+      { status: 500 },
     );
   return NextResponse.json({ data: "profile updated successfully" });
 }

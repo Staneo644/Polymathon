@@ -14,7 +14,7 @@ export async function PATCH(request: NextRequest) {
   if (!id || validated === undefined) {
     return NextResponse.json(
       { error: "Missing required fields" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -32,7 +32,7 @@ export async function PATCH(request: NextRequest) {
   if (error) {
     return NextResponse.json(
       { error: "db error: " + error.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 
@@ -41,7 +41,7 @@ export async function PATCH(request: NextRequest) {
   if (select.error) {
     return NextResponse.json(
       { error: "db error selecting word by id: " + select.error.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
   const deletereq = await supabase
@@ -52,7 +52,7 @@ export async function PATCH(request: NextRequest) {
   if (deletereq.error) {
     return NextResponse.json(
       { error: "db error deleting word by name: " + deletereq.error.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 

@@ -20,7 +20,7 @@ export default function validateWords() {
   useEffect(() => {
     fetch(
       `http://localhost:3000/api/word/unvalidated?${new URLSearchParams({ limit: "20" })}`,
-      { method: "GET" }
+      { method: "GET" },
     )
       .then((response) => {
         if (response.ok) {
@@ -51,7 +51,7 @@ export default function validateWords() {
     if (words && words.length > 0)
       fetch(
         `http://localhost:3000/api/word/id?${new URLSearchParams({ id: words[index].id.toString() })}`,
-        { method: "GET" }
+        { method: "GET" },
       )
         .then((response) => {
           if (response.ok) {
@@ -169,7 +169,7 @@ export default function validateWords() {
         words && words.length > 0 ? words[index].name : "",
         words && words.length > 0 ? words[index] : null,
         acceptWord,
-        rejectWord
+        rejectWord,
       )}
     </>
   );

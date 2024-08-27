@@ -6,7 +6,7 @@ import OneCard from "./oneCard";
 const CardContainer = (
   list: completeWord[],
   setList: (word: completeWord[]) => void,
-  onEnd: null | (() => void)
+  onEnd: null | (() => void),
 ) => {
   const [startIndex, setStartIndex] = useState(0);
   const cardsRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -31,7 +31,7 @@ const CardContainer = (
       `http://localhost:3000/api/view?${new URLSearchParams({ id: list[startIndex].id.toString() })}`,
       {
         method: "POST",
-      }
+      },
     ).catch((e: any) => {
       console.error("erreur: ", e);
     });

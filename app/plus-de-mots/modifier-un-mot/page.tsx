@@ -28,10 +28,8 @@ export default function MoreWorlds() {
         }
       })
       .catch((e) => {
-        console.error("erreur: ", e
-        );
-      }
-    );
+        console.error("erreur: ", e);
+      });
   };
 
   useEffect(() => {

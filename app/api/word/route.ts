@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 async function parseParamsGET(
   themes: ThemeRow[],
-  request: NextRequest
+  request: NextRequest,
 ): Promise<{ limit?: number; theme?: number; error?: string }> {
   const searchParams = request.nextUrl.searchParams;
   const limit = searchParams.get("limit");
@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
   if (!name || !definition || !type || !etymology || !example || !theme) {
     return NextResponse.json(
       { error: "Missing required fields" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
   if (error || !data || !data.id || !user_id) {
     return NextResponse.json(
       { error: "db error: " + error?.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 
@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
       {
         error: "error contribution:" + errorContribution.message,
       },
-      { status: 500 }
+      { status: 500 },
     );
   return NextResponse.json({ data: data.id }, { status: 201 });
 }
@@ -125,7 +125,7 @@ export async function PATCH(request: NextRequest) {
   if (profile.data.admin === false)
     return NextResponse.json(
       { error: "You are not an admin" },
-      { status: 403 }
+      { status: 403 },
     );
 
   if (
@@ -139,7 +139,7 @@ export async function PATCH(request: NextRequest) {
   ) {
     return NextResponse.json(
       { error: "Missing required fields" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -162,7 +162,7 @@ export async function PATCH(request: NextRequest) {
   if (error || !user_id) {
     return NextResponse.json(
       { error: "db error: " + error?.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 
@@ -175,7 +175,7 @@ export async function PATCH(request: NextRequest) {
       {
         error: "error contribution:" + errorContribution.message,
       },
-      { status: 500 }
+      { status: 500 },
     );
   return NextResponse.json({ data: "success" }, { status: 201 });
 }

@@ -10,7 +10,7 @@ export default function form(
   urlName: string,
   word: completeWord | null,
   click: (word: NewWord) => void,
-  reject: null | (() => void)
+  reject: null | (() => void),
 ): JSX.Element {
   const [name, setName] = useState(urlName);
   console.log(name);
@@ -23,18 +23,18 @@ export default function form(
   const [themes, setThemes] = useState<ThemeRow[]>();
 
   useEffect(() => {
-      fetch('http://localhost:3000/api/theme', { method: 'GET' })
-        .then((response) => {
-          if (response.ok) {
-            response.json().then((data) => {
-              setThemes(data.data);
-            });
-          }
-        })
-        .catch((e) => {
-          console.error('erreur: ', e);
-        });
-    }, []);
+    fetch("http://localhost:3000/api/theme", { method: "GET" })
+      .then((response) => {
+        if (response.ok) {
+          response.json().then((data) => {
+            setThemes(data.data);
+          });
+        }
+      })
+      .catch((e) => {
+        console.error("erreur: ", e);
+      });
+  }, []);
 
   useEffect(() => {
     if (word != null) {
@@ -44,7 +44,7 @@ export default function form(
       setType(word.type);
       setTheme(word.theme);
     }
-  },[ word])
+  }, [word]);
 
   useEffect(() => {
     if (urlName !== "") {
